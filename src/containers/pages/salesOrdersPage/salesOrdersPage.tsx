@@ -63,9 +63,11 @@ export default function SalesOrdersPage() {
                 title: 'Chat',
                 header: () => <ChatHeader title={'My Training'} />,
             }}>
-            <YStack f={1} mr="auto" p={16}>
+            <YStack f={1} mr="auto" p={16} bg="#0a0a0a">
                 <XStack p={16}>
-                    <Text fontSize={20}>Create a training or consult your training</Text>
+                    <Text fontSize={20} color="white">
+                        Create a training or consult your training
+                    </Text>
                 </XStack>
                 <FlatList
                     showsHorizontalScrollIndicator={false}
@@ -78,26 +80,30 @@ export default function SalesOrdersPage() {
                             mt={10}
                             jc="space-between"
                             f={1}
-                            bg="#d1d5db"
+                            bg="#171717"
                             style={{ width: '100%' }}
                             borderRadius={8}>
                             <XStack gap={10}>
                                 <XStack>
-                                    <MaterialCommunityIcons name="weight-lifter" size={48} />
+                                    <MaterialCommunityIcons name="weight-lifter" size={48} color="white" />
                                 </XStack>
                                 <YStack ac="center">
-                                    <Text textAlign="left">{item.name}</Text>
-                                    <Text textAlign="left">{item.description}</Text>
+                                    <Text textAlign="left" color="white">
+                                        {item.name}
+                                    </Text>
+                                    <Text textAlign="left" color="white">
+                                        {item.description}
+                                    </Text>
                                 </YStack>
                             </XStack>
 
                             <XStack ai="center">
-                                <MaterialIcons name="more-vert" size={24} color="#3b0764" />
+                                <MaterialIcons name="more-vert" size={24} color="white" />
                             </XStack>
                         </XStack>
                     )}
                 />
-                <YGroup gap={20} pt={16} mb={20} ac="flex-end" mt="auto">
+                <YGroup gap={20} pt={16} mb={20} ac="flex-end" ml="auto">
                     {menuBox.map((item, index) => (
                         <YGroup.Item key={index}>
                             <TouchableOpacity onPress={() => router.push(item.link as never)}>

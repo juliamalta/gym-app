@@ -40,9 +40,9 @@ export default function NewSerie() {
                 title: 'New Chat',
                 header: () => <ChatHeader title={'New Serie'} />,
             }}>
-            <XStack f={1} p={16} alignItems="center" justifyContent="center">
+            <XStack f={1} p={16} alignItems="center" justifyContent="center" bg="#0a0a0a">
                 {formVisible ? (
-                    <YStack w="100%" maxWidth={400} p={16} bg="#fff" borderRadius={8}>
+                    <YStack w="100%" maxWidth={400} p={16} bg="#171717" borderRadius={8}>
                         <TextInput
                             value={name}
                             onChangeText={setName}

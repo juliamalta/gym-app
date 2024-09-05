@@ -16,7 +16,7 @@ export default function ListUserController({ text, icon, navigationIcon }: ListU
                         fontSize={13}
                         lineHeight={21}
                         fontWeight="400"
-                        color="#000000"
+                        color="white"
                         ml={2}
                         paddingTop={8}
                         paddingBottom={4}>

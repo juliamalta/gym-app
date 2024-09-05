@@ -22,10 +22,10 @@ export default function ListUser({ name, email }: ListUserProps) {
                 <Avatar.Fallback backgroundColor="$gray5" />
             </Avatar>
             <View ml={16}>
-                <Text fontSize={20} lineHeight={24} fontWeight="500">
+                <Text fontSize={20} lineHeight={24} fontWeight="500" color="white">
                     {name}
                 </Text>
-                <Text>{email}</Text>
+                <Text color="white">{email}</Text>
             </View>
         </YStack>
     )

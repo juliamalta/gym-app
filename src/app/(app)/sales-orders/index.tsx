@@ -14,8 +14,8 @@ export default function SalesOrders() {
                 title: 'salesOrders',
                 header: () => <HeaderBar title={title} />,
             }}>
-            <ScrollView maxHeight="100%" width="100%" backgroundColor="#FFFFFF">
-                <YStack height="100%" gap="$3" mb="$4" padding="$3" backgroundColor="#FFFFFF">
+            <ScrollView maxHeight="100%" width="100%" bg="#0a0a0a">
+                <YStack height="100%" gap="$3" mb="$4" padding="$3" bg="#0a0a0a">
                     <SalesOrdersPage />
                 </YStack>
             </ScrollView>

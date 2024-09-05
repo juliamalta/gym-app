@@ -1,5 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons'
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
 import Ionicons from '@expo/vector-icons/Ionicons'
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { Link } from 'expo-router'
 import { router } from 'expo-router'
 import { collection, onSnapshot, deleteDoc } from 'firebase/firestore'
@@ -62,24 +64,18 @@ export default function Chat() {
                 title: 'Chat',
                 header: () => <ChatHeader title={'Social'} />,
             }}>
-            <YStack f={1} mr="auto" p={16}>
+            <YStack f={1} mr="auto" bg="#0a0a0a">
                 <XStack p={16}>
-                    <Text fontSize={20}>Chat</Text>
+                    <Text fontSize={20} color="white">
+                        Chat
+                    </Text>
                 </XStack>
                 <FlatList
                     showsHorizontalScrollIndicator={false}
                     data={chat}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
-                        <XStack
-                            ml="auto"
-                            p={16}
-                            mt={10}
-                            jc="space-between"
-                            f={1}
-                            bg="#d1d5db"
-                            style={{ width: '100%' }}
-                            borderRadius={8}>
+                        <XStack ml="auto" p={16} mt={3} jc="space-between" f={1} bg="#171717" style={{ width: '100%' }}>
                             <XStack gap={10}>
                                 <Avatar size={60} circular space="$2">
                                     <Avatar.Image
@@ -89,12 +85,24 @@ export default function Chat() {
                                     <Avatar.Fallback backgroundColor="$gray5" />
                                 </Avatar>
                                 <YStack pt={10}>
-                                    <Text textAlign="center">{item.description}</Text>
-                                    <Text textAlign="left">name.User</Text>
+                                    <Text textAlign="left" color="white">
+                                        name.User
+                                    </Text>
+                                    <Text textAlign="left" color="white">
+                                        {item.description}
+                                    </Text>
+                                    <XStack f={1} pt={20} gap={90}>
+                                        <XStack>
+                                            <FontAwesome5 name="comment-alt" size={24} color="black" />
+                                        </XStack>
+                                        <XStack>
+                                            <FontAwesome name="heart-o" size={24} color="black" />
+                                        </XStack>
+                                    </XStack>
                                 </YStack>
                             </XStack>
 
-                            <XStack ai="center">
+                            <XStack>
                                 <TouchableOpacity onPress={() => deleteChat(item.id)}>
                                     <FontAwesome name="trash" size={23} color="#f92e64"></FontAwesome>
                                 </TouchableOpacity>
@@ -102,7 +110,7 @@ export default function Chat() {
                         </XStack>
                     )}
                 />
-                <YGroup gap={20} pt={16} mb={20} ac="flex-end" mt="auto">
+                <YGroup gap={20} pt={16} mb={20} ac="flex-end" ml="auto">
                     {menuBox.map((item, index) => (
                         <YGroup.Item key={index}>
                             <TouchableOpacity onPress={() => router.push(item.link as never)}>

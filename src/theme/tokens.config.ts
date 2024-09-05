@@ -5,8 +5,8 @@ export const customToken = createTokens({
     ...tokens,
     color: {
         ...tokens.color,
-        primary: '#3b0764',
-        secondary: '#3b0764',
+        primary: '#171717',
+        secondary: '#171717',
         secondary50: '#52ACFF80',
         textGray: '#777777',
         textBlack: '#212529',

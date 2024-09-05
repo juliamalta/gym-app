@@ -17,8 +17,8 @@ export default function MorePage() {
                 header: () => <HeaderSignOut title={'More'} />,
             }}>
             <Stack.Screen />
-            <ScrollView maxHeight="100%" width="100%" backgroundColor="#F2F2F6">
-                <YStack height="100%" gap="$3" mb="$4" padding="$3" backgroundColor="#F2F2F6">
+            <ScrollView maxHeight="100%" width="100%" bg="#0a0a0a">
+                <YStack height="100%" gap="$3" mb="$4" padding="$3" bg="#0a0a0a">
                     <View>
                         <XStack>
                             <ListUser name="Jane Doe" email="jane.doe@mail" />
@@ -35,12 +35,7 @@ export default function MorePage() {
                                 CONFIGURATION
                             </Text>
                         </XStack>
-                        <YGroup
-                            backgroundColor="#FFFFFF"
-                            height={120}
-                            borderRadius={8}
-                            mt={10}
-                            separator={<Separator width={'85%'} ml="auto" mt={5} />}>
+                        <YGroup backgroundColor="#171717" height={120} borderRadius={8} mt={10}>
                             {ListController.map((item, index) => (
                                 <YGroup.Item key={index}>
                                     <TouchableOpacity>
