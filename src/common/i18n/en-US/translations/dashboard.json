@@ -1,0 +1,24 @@
+{
+    "title": "Sales summary",
+    "topSection": {
+        "first": {
+            "title": "This Month",
+            "filter": "{{value}} Sales"
+        },
+        "second": {
+            "title": "This Year",
+            "filter": "{{value}} Sales"
+        },
+        "third": {
+            "title": "Open Projects",
+            "filter": "{{value}} Projects"
+        },
+        "fourth": {
+            "title": "Closing this week",
+            "filter": "{{value}} Projects"
+        }
+    },
+    "chartSection": {
+        "chartTitle": "Last 12 Months"
+    }
+}

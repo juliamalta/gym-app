@@ -1,0 +1,9 @@
+build
+coverage
+.github
+.husky
+assets
+node_modules
+/postman
+babel.config.js
+metro.config.js

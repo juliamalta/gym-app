@@ -1,0 +1,16 @@
+{
+    "error": "Error",
+    "minLength": "The {{field}} must be at least {{min}} characters long.",
+    "maxLength": "The {{field}} must be at maximum {{max}} characters long.",
+    "arrayMaxLength": "The {{field}} must have at maximum {{max}} items.",
+    "arrayMinLength": "The {{field}} must have at least {{min}} item.",
+    "invalidCredentials": "Invalid email address or password.",
+    "invalidPassword": "Your password is invalid. Please try again.",
+    "invalid": "Please enter a valid {{field}}.",
+    "empty": "Please enter the {{field}}.",
+    "compositeRequired": "Please enter at least one of those fields: {{fields}}",
+    "notMatch": "{{field}} do not match.",
+    "alreadyExists": "The {{field}} already exists.",
+    "newPasswordNoValid": "Your new password cannot be the same as the current password. Please try again.",
+    "required": "Please enter the {{field}}."
+}

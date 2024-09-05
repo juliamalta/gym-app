@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "StoreBM",
+    "slug": "storebm-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/storebm-icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "backgroundColor": "#3b0764",
+      "resizeMode": "contain"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.store.bm"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/storebm-icon.png",
+        "backgroundColor": "#3b0764"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/icon.png",
+      "bundler": "metro"
+    },
+    "scheme": "storebm-app",
+    "experiments": {
+      "tsconfigPaths": true
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-secure-store"
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+/node_modules
+/build
+/coverage
+/dist
+/.vscode
+/.github
+/.next
+/.husky
+/.tamagui
+/public
+/src/assets/libs/*
+/postman
+/tests/cypres/*
+babel.config.js
+metro.config.js
+/src/common/gql/*
