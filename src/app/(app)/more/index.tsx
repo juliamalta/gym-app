@@ -25,7 +25,7 @@ export default function MorePage() {
                         </XStack>
                         <XStack>
                             <Text fontSize={13} lineHeight={21} fontWeight="400" color="#777777" ml={18} mt={3}>
-                                HUMAN RESOURCE MANAGEMENT
+                                CONFIGURATION
                             </Text>
                         </XStack>
                         <YGroup

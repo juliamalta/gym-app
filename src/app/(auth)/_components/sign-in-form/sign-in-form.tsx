@@ -12,18 +12,24 @@ const App = () => {
 
     const handleSignUp = async () => {
         try {
+            console.log('Attempting to sign up with email:', email)
             await auth().createUserWithEmailAndPassword(email, password)
+            console.log('User successfully signed up')
             setMessage('Usuário cadastrado com sucesso!')
         } catch (error) {
+            console.log('Sign up error:', error)
             setMessage(`Erro: ${error.message}`)
         }
     }
 
     const handleSignIn = async () => {
         try {
+            console.log('Attempting to sign in with email:', email)
             await auth().signInWithEmailAndPassword(email, password)
+            console.log('User successfully signed in')
             setMessage('Usuário autenticado com sucesso!')
         } catch (error) {
+            console.log('Sign in error:', error)
             setMessage(`Erro: ${error.message}`)
         }
     }
