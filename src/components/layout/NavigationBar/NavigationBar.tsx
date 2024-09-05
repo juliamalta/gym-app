@@ -1,4 +1,5 @@
 import { Feather, AntDesign, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
+import Entypo from '@expo/vector-icons/Entypo'
 import { Link, usePathname } from 'expo-router'
 import React from 'react'
 import { XStack, Text, YStack } from 'tamagui'
@@ -37,6 +38,11 @@ export default function NavigationBar() {
                 />
             ),
             title: 'My training',
+        },
+        {
+            link: appPath.chat,
+            icon: <Entypo name="chat" size={24} />,
+            title: 'Chat',
         },
         {
             link: appPath.more,

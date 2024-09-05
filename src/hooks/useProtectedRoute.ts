@@ -10,7 +10,7 @@ export function useProtectedRoute() {
     const segments = useSegments()
     const rootNavigation = useRootNavigation()
 
-    const isAuthenticated = false
+    const isAuthenticated = true
 
     useEffect(() => {
         if (!rootNavigation?.isReady()) {
