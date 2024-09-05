@@ -1,10 +1,12 @@
 import { Feather, Octicons } from '@expo/vector-icons'
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { Link, usePathname } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useAtomValue } from 'jotai'
 import React from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Text, View, XStack } from 'tamagui'
+import { Text, View, XStack, YStack } from 'tamagui'
+import { Avatar } from 'tamagui'
 
 import { appPath } from '@/common/configs/paths.config'
 import useAtomWithModal from '@/hooks/useAtomWithModal'
@@ -26,14 +28,14 @@ export default function HeaderBar({ title }: { title?: string }) {
             px={16}
             pb={10}>
             <StatusBar style="light" />
-            <Link href={appPath.notifications}>
-                <View w={24}>
-                    <Feather color="white" name="bell" size={24} />
-                </View>
-            </Link>
 
             {(pathname === appPath.projects.index || pathname === appPath.salesOrders.index) && (
                 <>
+                    <Link href={appPath.notifications}>
+                        <View w={24}>
+                            <Feather color="white" name="bell" size={24} />
+                        </View>
+                    </Link>
                     <Text
                         textAlign="center"
                         color="white"
@@ -56,23 +58,25 @@ export default function HeaderBar({ title }: { title?: string }) {
                     <XStack
                         borderRadius={8}
                         pressStyle={{ opacity: 0.5 }}
-                        mx="auto"
+                        mr="auto"
+                        pt={20}
                         ai="center"
                         gap={4}
                         onPress={toggle}>
-                        <Text
-                            textAlign="center"
-                            color="white"
-                            fontSize={16}
-                            fontWeight="500"
-                            lineHeight={24}
-                            mx="auto"
-                            alignItems="center">
-                            {selectOrg}
+                        <Avatar size={70} circular space="$2">
+                            <Avatar.Image
+                                accessibilityLabel="Cam"
+                                src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
+                            />
+                            <Avatar.Fallback backgroundColor="$gray5" />
+                        </Avatar>
+                        <Text fontSize={20} color="white" pl={10}>
+                            Hi, User
                         </Text>
-                        <Feather name={isOpened ? 'chevron-up' : 'chevron-down'} size={16} color="white" />
                     </XStack>
-                    <View w={24}></View>
+                    <View ml="auto" pt={40}>
+                        <MaterialIcons name="logout" size={30} color="white" />
+                    </View>
                 </>
             )}
         </XStack>

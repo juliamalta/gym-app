@@ -49,9 +49,7 @@ export default function Dashboard() {
             fullscreen>
             <YStack p={16} f={1}>
                 <YStack gap={8}>
-                    <Text fontSize={24} lineHeight={27} mt={16} fontWeight="400">
-                        Hi ,Welcome in GYM Training
-                    </Text>
+                    <Text fontSize={24} lineHeight={27} mt={16} fontWeight="400"></Text>
                 </YStack>
             </YStack>
             <SelectOrgModal />
