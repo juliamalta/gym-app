@@ -1,4 +1,5 @@
 import { Feather } from '@expo/vector-icons'
+import Ionicons from '@expo/vector-icons/Ionicons'
 import { Link } from 'expo-router'
 import React from 'react'
 import { XStack, Text, View } from 'tamagui'
@@ -12,7 +13,7 @@ export default function ChatHeader({ title }: { title: string }) {
     const menuBox: BoxDetailItemProps[] = [
         {
             link: appPath.dashboard,
-            icon: <Feather color="white" name="chevron-left" size={24} />,
+            icon: <Ionicons name="chatbox-outline" size={24} color="white" />,
             title: 'My Company',
         },
     ]
@@ -24,9 +25,8 @@ export default function ChatHeader({ title }: { title: string }) {
                     <XStack
                         pressStyle={{ backgroundColor: '$secondary' }}
                         backgroundColor="$secondary"
-                        height={84}
+                        height={130}
                         width="100%"
-                        ai="center"
                         jc="space-between"
                         ac="space-around"
                         alignItems="flex-end"
@@ -36,13 +36,7 @@ export default function ChatHeader({ title }: { title: string }) {
                             <Text color="white">{box.icon}</Text>
                         </View>
 
-                        <Text
-                            textAlign="center"
-                            color="white"
-                            fontSize={16}
-                            fontWeight="500"
-                            lineHeight={24}
-                            alignItems="center">
+                        <Text color="white" fontSize={16} fontWeight="500" lineHeight={24}>
                             {title}
                         </Text>
                         <Text></Text>

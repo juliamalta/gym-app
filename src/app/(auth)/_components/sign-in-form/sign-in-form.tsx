@@ -30,7 +30,7 @@ const App = () => {
             setMessage('Usuário autenticado com sucesso!')
         } catch (error) {
             console.log('Sign in error:', error)
-            setMessage(`Erro: ${error.message}`)
+            setMessage(`Erro: `)
         }
     }
 

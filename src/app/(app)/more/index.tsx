@@ -23,16 +23,23 @@ export default function MorePage() {
                         <XStack>
                             <ListUser name="Jane Doe" email="jane.doe@mail" />
                         </XStack>
-                        <XStack>
-                            <Text fontSize={13} lineHeight={21} fontWeight="400" color="#777777" ml={18} mt={3}>
+                        <XStack jc="center">
+                            <Text
+                                fontSize={13}
+                                lineHeight={21}
+                                fontWeight="400"
+                                color="#777777"
+                                ml={18}
+                                pt={30}
+                                textAlign="center">
                                 CONFIGURATION
                             </Text>
                         </XStack>
                         <YGroup
                             backgroundColor="#FFFFFF"
-                            height={80}
+                            height={120}
                             borderRadius={8}
-                            mt={6}
+                            mt={10}
                             separator={<Separator width={'85%'} ml="auto" mt={5} />}>
                             {ListController.map((item, index) => (
                                 <YGroup.Item key={index}>
@@ -41,7 +48,7 @@ export default function MorePage() {
                                             text={item.text}
                                             icon={item.icon}
                                             navigationIcon={
-                                                <Entypo name="chevron-small-right" size={24} color="#DDDDDD" />
+                                                <Entypo name="chevron-small-right" size={40} color="#DDDDDD" />
                                             }
                                         />
                                     </TouchableOpacity>

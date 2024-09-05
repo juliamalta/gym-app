@@ -42,7 +42,7 @@ export default function NavigationBar() {
         {
             link: appPath.chat,
             icon: <Entypo name="chat" size={24} />,
-            title: 'Chat',
+            title: 'Social',
         },
         {
             link: appPath.more,
