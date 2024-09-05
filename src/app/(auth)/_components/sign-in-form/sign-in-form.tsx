@@ -79,7 +79,7 @@ const App = () => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = eet.create({
     container: {
         flex: 1,
         justifyContent: 'center',

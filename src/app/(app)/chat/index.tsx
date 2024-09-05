@@ -74,6 +74,7 @@ export default function Chat() {
                         <XStack
                             ml="auto"
                             p={16}
+                            mt={10}
                             jc="space-between"
                             f={1}
                             bg="#d1d5db"
