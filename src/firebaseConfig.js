@@ -1,6 +1,9 @@
+// Import the required Firebase SDK functions
 import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
-// Configurações do Firebase
+import { getFirestore } from 'firebase/firestore'
+import { getStorage } from 'firebase/storage'
+
+// Firebase configuration object
 const firebaseConfig = {
     apiKey: 'AIzaSyBFItYxnXd5YjHDhfM1Y-c1GEEO7O1AGhA',
     authDomain: 'gymtraining-app.firebaseapp.com',
@@ -11,6 +14,11 @@ const firebaseConfig = {
     measurementId: 'G-NJR72R1P34',
 }
 
-// Inicializando o Firebase
+// Initialize Firebase app
 const app = initializeApp(firebaseConfig)
-export const auth = getAuth(app)
+
+// Get Firestore and Storage services
+const database = getFirestore(app)
+const storage = getStorage(app)
+
+export { database, storage }

@@ -14,7 +14,11 @@ export const appPath = {
         detail: '/sales-orders/detail-sales',
     },
     notifications: '/notifications',
-    chat: '/chat',
+    chat: {
+        index: '/chat',
+        newchat: '/chat/newChat',
+    },
+
     more: '/more',
     filter: '/filter',
 }
