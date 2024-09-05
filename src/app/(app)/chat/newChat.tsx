@@ -1,7 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { collection, addDoc } from 'firebase/firestore'
 import React, { useState } from 'react'
-import { TouchableOpacity, TextInput, Button, Alert } from 'react-native'
+import { TouchableOpacity, TextInput, Button, Alert, StyleSheet } from 'react-native'
 import { XStack, YStack, Text } from 'tamagui'
 
 import ChatHeader from '@/components/layout/ChatHeader/ChatHeader'
@@ -47,15 +47,29 @@ export default function NewChat() {
                             placeholder="Enter chat description"
                             style={{ padding: 10, backgroundColor: '#f1f1f1', borderRadius: 8, marginBottom: 10 }}
                         />
-                        <Button title="Add Chat" onPress={addChat} />
+                        <TouchableOpacity style={styles.button} onPress={addChat}>
+                            <Text fontSize={16} color="#ffff">
+                                Add Chat
+                            </Text>
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={() => setFormVisible(false)}>
                             <Ionicons name="close-circle" size={60} color="#3b0764" />
                         </TouchableOpacity>
                     </YStack>
                 ) : (
-                    <Text>Chat added successfully!</Text>
+                    <Text fontSize={28}>Chat added successfully!</Text>
                 )}
             </XStack>
         </ScreenTemplate>
     )
 }
+
+const styles = StyleSheet.create({
+    button: {
+        backgroundColor: '#3b0764', // Purple color
+        padding: 15,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+})

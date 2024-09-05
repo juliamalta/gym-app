@@ -1,7 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { collection, addDoc } from 'firebase/firestore'
 import React, { useState } from 'react'
-import { TouchableOpacity, TextInput, Button, Alert } from 'react-native'
+import { TouchableOpacity, TextInput, Button, Alert, StyleSheet } from 'react-native'
 import { XStack, YStack, Text } from 'tamagui'
 
 import ChatHeader from '@/components/layout/ChatHeader/ChatHeader'
@@ -55,7 +55,9 @@ export default function NewSerie() {
                             placeholder="Enter description of serie"
                             style={{ padding: 10, backgroundColor: '#f1f1f1', borderRadius: 8, marginBottom: 10 }}
                         />
-                        <Button title="Add Training" onPress={addSerie} />
+                        <TouchableOpacity style={styles.button} onPress={addSerie}>
+                            <Text style={styles.buttonText}>Add Training</Text>
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={() => setFormVisible(false)}>
                             <Ionicons name="close-circle" size={60} color="#3b0764" />
                         </TouchableOpacity>
@@ -67,3 +69,17 @@ export default function NewSerie() {
         </ScreenTemplate>
     )
 }
+
+const styles = StyleSheet.create({
+    button: {
+        backgroundColor: '#3b0764', // Purple color
+        padding: 15,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+    },
+})
