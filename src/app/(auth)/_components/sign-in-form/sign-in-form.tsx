@@ -1,19 +1,23 @@
-import auth from '@react-native-firebase/auth'
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native'
 import { XStack, YStack } from 'tamagui'
 
 import { LoadingButton } from '@/components/core/LoadingButton'
 
+import { app } from '../../../../firebaseConfig'
+
 const App = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [message, setMessage] = useState('')
 
+    const auth = getAuth(app)
+
     const handleSignUp = async () => {
         try {
             console.log('Attempting to sign up with email:', email)
-            await auth().createUserWithEmailAndPassword(email, password)
+            await createUserWithEmailAndPassword(auth, email, password)
             console.log('User successfully signed up')
             setMessage('Usuário cadastrado com sucesso!')
         } catch (error) {
@@ -25,12 +29,12 @@ const App = () => {
     const handleSignIn = async () => {
         try {
             console.log('Attempting to sign in with email:', email)
-            await auth().signInWithEmailAndPassword(email, password)
+            await signInWithEmailAndPassword(auth, email, password)
             console.log('User successfully signed in')
             setMessage('Usuário autenticado com sucesso!')
         } catch (error) {
             console.log('Sign in error:', error)
-            setMessage(`Erro: `)
+            setMessage(`Erro: ${error.message}`)
         }
     }
 
