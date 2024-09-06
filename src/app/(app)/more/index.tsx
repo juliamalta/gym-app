@@ -1,6 +1,8 @@
 import { Entypo } from '@expo/vector-icons'
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { Stack } from 'expo-router'
 import { TouchableOpacity } from 'react-native'
+import ImagePicker from 'react-native-image-picker'
 import { ScrollView, YStack, Text, XStack, View, YGroup, Separator } from 'tamagui'
 
 import { ListUser } from '@/components/core/ListUser'

@@ -9,7 +9,7 @@ import { doc } from 'firebase/firestore'
 import React, { useState, useEffect } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { FlatList } from 'react-native'
-import { XStack, View, Text, YGroup, YStack } from 'tamagui'
+import { XStack, View, Text, YGroup, YStack, XGroup } from 'tamagui'
 import { Avatar } from 'tamagui'
 
 import { appPath } from '@/common/configs/paths.config'
@@ -25,7 +25,7 @@ export default function Chat() {
     const menuBox: BoxDetailItemProps[] = [
         {
             link: appPath.chat.newchat,
-            icon: <Ionicons name="add-circle" size={60} color="#3b0764" />,
+            icon: <Ionicons name="add-circle" size={30} color="#3b0764" />,
             title: 'Notifications',
         },
     ]
@@ -65,11 +65,27 @@ export default function Chat() {
                 header: () => <ChatHeader title={'Social'} />,
             }}>
             <YStack f={1} mr="auto" bg="#0a0a0a">
-                <XStack p={16}>
-                    <Text fontSize={20} color="white">
-                        Chat
-                    </Text>
-                </XStack>
+                <XGroup gap={20} pt={16} mb={20} ai="center" jc="center">
+                    <Avatar size={60} circular space="$2">
+                        <Avatar.Image
+                            accessibilityLabel="Cam"
+                            src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
+                        />
+                        <Avatar.Fallback backgroundColor="$gray5" />
+                    </Avatar>
+                    <YStack>
+                        <Text color="white">User.name</Text>
+                        <Text color="white">What´s up?</Text>
+                    </YStack>
+
+                    {menuBox.map((item, index) => (
+                        <YGroup.Item key={index}>
+                            <TouchableOpacity onPress={() => router.push(item.link as never)}>
+                                {item.icon}
+                            </TouchableOpacity>
+                        </YGroup.Item>
+                    ))}
+                </XGroup>
                 <FlatList
                     showsHorizontalScrollIndicator={false}
                     data={chat}
@@ -93,10 +109,10 @@ export default function Chat() {
                                     </Text>
                                     <XStack f={1} pt={20} gap={90}>
                                         <XStack>
-                                            <FontAwesome5 name="comment-alt" size={24} color="black" />
+                                            <FontAwesome5 name="comment-alt" size={24} color="white" />
                                         </XStack>
                                         <XStack>
-                                            <FontAwesome name="heart-o" size={24} color="black" />
+                                            <FontAwesome name="heart-o" size={24} color="white" />
                                         </XStack>
                                     </XStack>
                                 </YStack>
@@ -110,15 +126,6 @@ export default function Chat() {
                         </XStack>
                     )}
                 />
-                <YGroup gap={20} pt={16} mb={20} ac="flex-end" ml="auto">
-                    {menuBox.map((item, index) => (
-                        <YGroup.Item key={index}>
-                            <TouchableOpacity onPress={() => router.push(item.link as never)}>
-                                {item.icon}
-                            </TouchableOpacity>
-                        </YGroup.Item>
-                    ))}
-                </YGroup>
             </YStack>
         </ScreenTemplate>
     )
