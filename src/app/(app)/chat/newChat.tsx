@@ -3,6 +3,7 @@ import { collection, addDoc } from 'firebase/firestore'
 import React, { useState } from 'react'
 import { TouchableOpacity, TextInput, Button, Alert, StyleSheet } from 'react-native'
 import { XStack, YStack, Text } from 'tamagui'
+import { Avatar } from 'tamagui'
 
 import ChatHeader from '@/components/layout/ChatHeader/ChatHeader'
 import { ScreenTemplate } from '@/components/template/ScreenTemplate'
@@ -49,24 +50,46 @@ export default function NewChat() {
             }}>
             <XStack f={1} p={16} alignItems="center" justifyContent="center" bg="#0a0a0a">
                 {formVisible ? (
-                    <YStack w="100%" maxWidth={400} p={16} bg="#171717" borderRadius={8}>
-                        <TextInput
-                            value={description}
-                            onChangeText={setDescription}
-                            placeholder="Enter chat description"
-                            style={{ padding: 10, backgroundColor: '#f1f1f1', borderRadius: 8, marginBottom: 10 }}
-                        />
-                        <TouchableOpacity style={styles.button} onPress={addChat}>
-                            <Text fontSize={16} color="#ffff">
-                                Add Chat
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setFormVisible(false)}>
-                            <Ionicons name="close-circle" size={60} color="#3b0764" />
-                        </TouchableOpacity>
+                    <YStack w="100%" h={400} p={16} bg="#171717" borderRadius={8}>
+                        <XStack justifyContent="space-between" ai="center">
+                            <TouchableOpacity onPress={() => setFormVisible(false)}>
+                                <Text color="#60a5fa">Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button} onPress={addChat}>
+                                <Text fontSize={12} color="#60a5fa">
+                                    Post
+                                </Text>
+                            </TouchableOpacity>
+                        </XStack>
+                        <XStack>
+                            <Avatar size={60} circular>
+                                <Avatar.Image
+                                    accessibilityLabel="Cam"
+                                    src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
+                                />
+                                <Avatar.Fallback backgroundColor="$gray5" />
+                            </Avatar>
+                            <TextInput
+                                value={description}
+                                onChangeText={setDescription}
+                                placeholderTextColor="#52525b"
+                                placeholder="What´s up?"
+                                style={{
+                                    padding: 10,
+                                    backgroundColor: 'transparent',
+                                    borderRadius: 8,
+                                    marginBottom: 10,
+                                    color: '#fafaf9',
+                                }}
+                            />
+                        </XStack>
                     </YStack>
                 ) : (
-                    <Text fontSize={28}>Chat added successfully!</Text>
+                    <XStack f={1} p={16} alignItems="center" justifyContent="center" bg="#0a0a0a">
+                        <Text fontSize={20} color="white">
+                            Post added successfully!
+                        </Text>
+                    </XStack>
                 )}
             </XStack>
         </ScreenTemplate>
@@ -75,10 +98,11 @@ export default function NewChat() {
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: '#3b0764', // Purple color
+        backgroundColor: '#262626', // Purple color
         padding: 15,
-        borderRadius: 8,
+
+        borderRadius: 10,
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 5,
     },
 })

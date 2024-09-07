@@ -1,10 +1,11 @@
 import { FontAwesome } from '@expo/vector-icons'
+import Entypo from '@expo/vector-icons/Entypo'
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { Link } from 'expo-router'
 import { router } from 'expo-router'
-import { collection, onSnapshot, deleteDoc, query, where, QuerySnapshot, updateDoc } from 'firebase/firestore'
+import { collection, onSnapshot, deleteDoc, query, where, QuerySnapshot, updateDoc, addDoc } from 'firebase/firestore'
 import { doc } from 'firebase/firestore'
 import React, { useState, useEffect } from 'react'
 import { TouchableOpacity, Modal, Alert, StyleSheet, TextInput } from 'react-native'
@@ -25,11 +26,10 @@ export default function Chat() {
     const menuBox: BoxDetailItemProps[] = [
         {
             link: appPath.chat.newchat,
-            icon: <Ionicons name="add-circle" size={30} color="#3b0764" />,
-            title: 'Notifications',
+            icon: <Entypo name="new-message" size={24} color="white" />,
         },
     ]
-
+    const [comment, setComment] = useState('')
     const [like, setLike] = useState([])
     const [userConfigs, setUserConfigs] = useState({})
     const [modalVisible, setModalVisible] = useState(false)
@@ -90,6 +90,24 @@ export default function Chat() {
             console.error('Error liking chat:', error)
         }
     }
+    const addChat = async () => {
+        if (!comment.trim()) {
+            Alert.alert('Error', 'Description cannot be empty')
+            return
+        }
+
+        try {
+            await addDoc(collection(database, 'Chats'), {
+                userId,
+                comment,
+
+                // Add other fields as necessary
+            })
+            setComment('') // Clear the input field
+        } catch (error) {
+            console.error('Error adding chat:', error)
+        }
+    }
 
     return (
         <ScreenTemplate
@@ -98,8 +116,8 @@ export default function Chat() {
                 header: () => <ChatHeader title={'Social'} />,
             }}>
             <YStack f={1} mr="auto" bg="#0a0a0a">
-                <XGroup gap={20} pt={16} mb={20} ai="center" jc="center">
-                    <Avatar size={60} circular space="$2">
+                <XGroup gap={20} pt={20} mb={25} ai="center" jc="center" ml={16}>
+                    <Avatar size={60} circular>
                         <Avatar.Image
                             accessibilityLabel="Cam"
                             src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
@@ -110,15 +128,17 @@ export default function Chat() {
                         <Text color="white">{userConfigs[userId] ?? 'User.name'}</Text>
                         <Text color="white">What´s up?</Text>
                     </YStack>
-
-                    {menuBox.map((item, index) => (
-                        <YGroup.Item key={index}>
-                            <TouchableOpacity onPress={() => router.push(item.link as never)}>
-                                {item.icon}
-                            </TouchableOpacity>
-                        </YGroup.Item>
-                    ))}
+                    <XGroup ai="center" ml="auto" mr={10} p={16}>
+                        {menuBox.map((item, index) => (
+                            <YGroup.Item key={index}>
+                                <TouchableOpacity onPress={() => router.push(item.link as never)}>
+                                    {item.icon}
+                                </TouchableOpacity>
+                            </YGroup.Item>
+                        ))}
+                    </XGroup>
                 </XGroup>
+
                 <FlatList
                     showsHorizontalScrollIndicator={false}
                     data={chat}
@@ -126,20 +146,21 @@ export default function Chat() {
                     renderItem={({ item }) => (
                         <XStack ml="auto" p={16} mt={3} jc="space-between" f={1} bg="#171717" style={{ width: '100%' }}>
                             <XStack gap={10}>
-                                <Avatar size={60} circular space="$2">
+                                <Avatar size={50} circular space="$2">
                                     <Avatar.Image
                                         accessibilityLabel="Cam"
                                         src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
                                     />
                                     <Avatar.Fallback backgroundColor="$gray5" />
                                 </Avatar>
-                                <YStack pt={10}>
+                                <YStack ac="center">
                                     <Text textAlign="left" color="white">
                                         {userConfigs[item.userId] ?? item.userId}
                                     </Text>
                                     <Text textAlign="left" color="white">
                                         {item.description}
                                     </Text>
+
                                     <XStack f={1} pt={20} gap={90}>
                                         <Modal
                                             animationType="slide"
@@ -153,6 +174,8 @@ export default function Chat() {
                                                 <View style={styles.modalView}>
                                                     <Text style={styles.modalText}>What you comment about This</Text>
                                                     <TextInput
+                                                        value={comment}
+                                                        onChangeText={setComment}
                                                         placeholder="Enter your comment"
                                                         style={{
                                                             padding: 10,
@@ -162,6 +185,11 @@ export default function Chat() {
                                                             width: 300,
                                                         }}
                                                     />
+                                                    <TouchableOpacity style={styles.button} onPress={addChat}>
+                                                        <Text fontSize={16} color="#ffff">
+                                                            Add Comment
+                                                        </Text>
+                                                    </TouchableOpacity>
                                                     <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                                                         <XStack>
                                                             <Text style={styles.textStyle}>Fechar</Text>
@@ -170,15 +198,10 @@ export default function Chat() {
                                                 </View>
                                             </View>
                                         </Modal>
-                                        <TouchableOpacity onPress={() => setModalVisible(true)}>
-                                            <XStack>
-                                                <FontAwesome5 name="comment-alt" size={24} color="white" />
-                                            </XStack>
-                                        </TouchableOpacity>
                                         <XStack gap={4}>
                                             <TouchableOpacity onPress={() => handleLike(item.id, item.like)}>
                                                 <XStack gap={10}>
-                                                    <FontAwesome name="heart-o" size={24} color="white" />
+                                                    <FontAwesome name="heart-o" size={20} color="white" />
 
                                                     <Text color="white" textAlign="center">
                                                         {item.like}
@@ -186,6 +209,11 @@ export default function Chat() {
                                                 </XStack>
                                             </TouchableOpacity>
                                         </XStack>
+                                        <TouchableOpacity onPress={() => setModalVisible(true)}>
+                                            <XStack>
+                                                <FontAwesome5 name="comment-alt" size={20} color="white" />
+                                            </XStack>
+                                        </TouchableOpacity>
                                     </XStack>
                                 </YStack>
                             </XStack>
