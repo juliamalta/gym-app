@@ -14,10 +14,10 @@ export default function SignInHeader() {
                 <Image style={{ width: '100%', height: '100%' }} source={require('../../../../../assets/logo.png')} />
             </View>
             <View ai="center">
-                <Text alignItems="center" fontWeight="500" fontSize={28} lineHeight={42}>
+                <Text alignItems="center" fontWeight="500" fontSize={28} lineHeight={42} color="white">
                     {t('title')}
                 </Text>
-                <Text alignItems="center" fontSize={16} lineHeight={24}>
+                <Text alignItems="center" fontSize={16} lineHeight={24} color="white">
                     {t('description')}
                 </Text>
             </View>

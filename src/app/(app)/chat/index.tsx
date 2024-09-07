@@ -160,6 +160,9 @@ export default function Chat() {
                                     <Text textAlign="left" color="white">
                                         {item.description}
                                     </Text>
+                                    <Text textAlign="left" color="white">
+                                        {item.comment}
+                                    </Text>
 
                                     <XStack f={1} pt={20} gap={90}>
                                         <Modal

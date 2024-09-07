@@ -1,5 +1,6 @@
 import { Entypo } from '@expo/vector-icons'
 import AntDesign from '@expo/vector-icons/AntDesign'
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
 import { Stack } from 'expo-router'
 import { collection, addDoc, query, where } from 'firebase/firestore'
 import { onSnapshot } from 'firebase/firestore'
@@ -78,10 +79,7 @@ export default function Config() {
             }}>
             <Stack.Screen />
 
-            <YStack bg="#0a0a0a" jc="center" ai="center" width="100%" height="100%">
-                <Text color="white" fontSize={20}>
-                    Config our User
-                </Text>
+            <YStack bg="#0a0a0a" width="100%" height="100%" f={1} p={16}>
                 <YStack ai="center">
                     <YStack
                         borderRadius={8}
@@ -90,9 +88,10 @@ export default function Config() {
                         paddingRight={16}
                         paddingBottom={8}
                         paddingLeft={8}
+                        jc="space-evenly"
                         ac="center"
                         ai="center">
-                        <YStack>
+                        <XStack>
                             <TouchableOpacity>
                                 <Avatar size={90} circular space="$2">
                                     <Avatar.Image
@@ -105,15 +104,16 @@ export default function Config() {
                                     <AntDesign name="upload" size={24} color="white" />
                                 </XStack>
                             </TouchableOpacity>
-                        </YStack>
-                        <View ml={16} pt={5}>
-                            <Text fontSize={20} lineHeight={24} fontWeight="500" color="white">
+                        </XStack>
+                        <YStack ai="center" pt={7}>
+                            <Text fontSize={20} lineHeight={24} fontWeight="500" color="white" textAlign="center">
                                 {userConfig ? userConfig.name : 'No name set'}
                             </Text>
                             <Text color="white">{userEmail ? userEmail : 'Guest'}</Text>
-                        </View>
+                        </YStack>
                     </YStack>
                     <YStack pt={20}>
+                        <Text color="white">Name User :</Text>
                         <TextInput
                             value={name}
                             onChangeText={setName}
@@ -127,9 +127,7 @@ export default function Config() {
                             }}
                         />
                         <TouchableOpacity style={styles.button} onPress={changeName}>
-                            <Text fontSize={16} color="#ffff">
-                                Save Change
-                            </Text>
+                            <FontAwesome5 name="save" size={24} color="white" />
                         </TouchableOpacity>
                     </YStack>
                 </YStack>
@@ -140,9 +138,12 @@ export default function Config() {
 
 const styles = StyleSheet.create({
     button: {
+        width: 80,
         backgroundColor: '#3b0764', // Purple color
         padding: 15,
         borderRadius: 8,
+        marginLeft: 'auto',
+        alignContent: 'center',
         alignItems: 'center',
         marginBottom: 10,
     },

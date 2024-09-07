@@ -11,7 +11,7 @@ export default function SignInPage() {
     console.log('Firebase Auth Initialized:', auth)
 
     return (
-        <YStack fullscreen px="$xl" gap="$xl3">
+        <YStack fullscreen px="$xl" gap="$xl3" bg="#0a0a0a">
             <StatusBar />
             <SignInHeader />
             <SignInForm />
