@@ -4,10 +4,10 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { Link } from 'expo-router'
 import { router } from 'expo-router'
-import { collection, onSnapshot, deleteDoc } from 'firebase/firestore'
+import { collection, onSnapshot, deleteDoc, query, where, QuerySnapshot, updateDoc } from 'firebase/firestore'
 import { doc } from 'firebase/firestore'
 import React, { useState, useEffect } from 'react'
-import { TouchableOpacity } from 'react-native'
+import { TouchableOpacity, Modal, Alert, StyleSheet, TextInput } from 'react-native'
 import { FlatList } from 'react-native'
 import { XStack, View, Text, YGroup, YStack, XGroup } from 'tamagui'
 import { Avatar } from 'tamagui'
@@ -18,7 +18,7 @@ import ChatHeader from '@/components/layout/ChatHeader/ChatHeader'
 import { ScreenTemplate } from '@/components/template/ScreenTemplate'
 import { useProtectedRoute } from '@/hooks/useProtectedRoute'
 
-import { database } from '../../../firebaseConfig'
+import { auth, database } from '../../../firebaseConfig'
 
 export default function Chat() {
     useProtectedRoute()
@@ -30,6 +30,12 @@ export default function Chat() {
         },
     ]
 
+    const [like, setLike] = useState([])
+    const [userConfigs, setUserConfigs] = useState({})
+    const [modalVisible, setModalVisible] = useState(false)
+    const user = auth.currentUser
+    const [totalCount, setTotalCount] = useState(0)
+    const userId = user ? user.email : null
     const [chat, setChat] = useState([])
     useEffect(() => {
         // Reference to the 'Chats' collection
@@ -58,6 +64,33 @@ export default function Chat() {
         }
     }
 
+    useEffect(() => {
+        const userConfigRef = collection(database, 'UserConfig')
+
+        const unsubscribe = onSnapshot(userConfigRef, (querySnapshot) => {
+            const userMap = {}
+            querySnapshot.forEach((doc) => {
+                const data = doc.data()
+                userMap[data.userId] = data.name // Mapeia userId -> name
+            })
+            setUserConfigs(userMap)
+        })
+
+        return () => unsubscribe()
+    }, [])
+
+    const handleLike = async (chatId, currentLikeCount) => {
+        try {
+            const chatDocRef = doc(database, 'Chats', chatId)
+            await updateDoc(chatDocRef, {
+                like: currentLikeCount + 1,
+            })
+            console.log('Chat liked successfully')
+        } catch (error) {
+            console.error('Error liking chat:', error)
+        }
+    }
+
     return (
         <ScreenTemplate
             options={{
@@ -74,7 +107,7 @@ export default function Chat() {
                         <Avatar.Fallback backgroundColor="$gray5" />
                     </Avatar>
                     <YStack>
-                        <Text color="white">User.name</Text>
+                        <Text color="white">{userConfigs[userId] ?? 'User.name'}</Text>
                         <Text color="white">What´s up?</Text>
                     </YStack>
 
@@ -102,27 +135,69 @@ export default function Chat() {
                                 </Avatar>
                                 <YStack pt={10}>
                                     <Text textAlign="left" color="white">
-                                        {item.userId}
+                                        {userConfigs[item.userId] ?? item.userId}
                                     </Text>
                                     <Text textAlign="left" color="white">
                                         {item.description}
                                     </Text>
                                     <XStack f={1} pt={20} gap={90}>
-                                        <XStack>
-                                            <FontAwesome5 name="comment-alt" size={24} color="white" />
-                                        </XStack>
-                                        <XStack>
-                                            <FontAwesome name="heart-o" size={24} color="white" />
+                                        <Modal
+                                            animationType="slide"
+                                            transparent={true}
+                                            visible={modalVisible}
+                                            onRequestClose={() => {
+                                                Alert.alert('Modal has been closed.')
+                                                setModalVisible(!modalVisible)
+                                            }}>
+                                            <View style={styles.centeredView}>
+                                                <View style={styles.modalView}>
+                                                    <Text style={styles.modalText}>What you comment about This</Text>
+                                                    <TextInput
+                                                        placeholder="Enter your comment"
+                                                        style={{
+                                                            padding: 10,
+                                                            backgroundColor: '#f1f1f1',
+                                                            borderRadius: 8,
+                                                            marginBottom: 20,
+                                                            width: 300,
+                                                        }}
+                                                    />
+                                                    <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                                                        <XStack>
+                                                            <Text style={styles.textStyle}>Fechar</Text>
+                                                        </XStack>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            </View>
+                                        </Modal>
+                                        <TouchableOpacity onPress={() => setModalVisible(true)}>
+                                            <XStack>
+                                                <FontAwesome5 name="comment-alt" size={24} color="white" />
+                                            </XStack>
+                                        </TouchableOpacity>
+                                        <XStack gap={4}>
+                                            <TouchableOpacity onPress={() => handleLike(item.id, item.like)}>
+                                                <XStack gap={10}>
+                                                    <FontAwesome name="heart-o" size={24} color="white" />
+
+                                                    <Text color="white" textAlign="center">
+                                                        {item.like}
+                                                    </Text>
+                                                </XStack>
+                                            </TouchableOpacity>
                                         </XStack>
                                     </XStack>
                                 </YStack>
                             </XStack>
-
-                            <XStack>
-                                <TouchableOpacity onPress={() => deleteChat(item.id)}>
-                                    <FontAwesome name="trash" size={23} color="#f92e64"></FontAwesome>
-                                </TouchableOpacity>
-                            </XStack>
+                            {userId === item.userId && (
+                                <>
+                                    <XStack>
+                                        <TouchableOpacity onPress={() => deleteChat(item.id)}>
+                                            <FontAwesome name="trash" size={23} color="#f92e64"></FontAwesome>
+                                        </TouchableOpacity>
+                                    </XStack>
+                                </>
+                            )}
                         </XStack>
                     )}
                 />
@@ -130,3 +205,47 @@ export default function Chat() {
         </ScreenTemplate>
     )
 }
+const styles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: '#262626',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#2196F3',
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+        color: 'white',
+    },
+})

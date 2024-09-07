@@ -1,14 +1,17 @@
 import AntDesign from '@expo/vector-icons/AntDesign'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+import { collection, onSnapshot, deleteDoc } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { XStack, Text, Avatar, View, YStack } from 'tamagui'
 
 import { ListUserProps } from '@/components/core/ListUser/ListUser.types'
 
+import { database } from '../../../firebaseConfig'
 import { auth } from '../../../firebaseConfig'
 export default function ListUser({ name, email }: ListUserProps) {
     const [userEmail, setUserEmail] = useState<string | null>(null)
+    const [userConfig, setConfig] = useState([])
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {

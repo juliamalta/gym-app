@@ -45,7 +45,7 @@ export default function NavigationBar() {
             title: 'Social',
         },
         {
-            link: appPath.more,
+            link: appPath.more.index,
             icon: <Feather name="more-horizontal" size={24} />,
             title: 'More',
         },

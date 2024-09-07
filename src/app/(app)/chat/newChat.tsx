@@ -12,7 +12,9 @@ import { database } from '../../../firebaseConfig'
 
 export default function NewChat() {
     const [description, setDescription] = useState('')
-    const [formVisible, setFormVisible] = useState(true) // Start with form visible
+    const [comment, setcomment] = useState('')
+    const [like, setlike] = useState(0)
+    const [formVisible, setFormVisible] = useState(true)
 
     const user = auth.currentUser
     const userId = user ? user.email : null
@@ -27,6 +29,8 @@ export default function NewChat() {
             await addDoc(collection(database, 'Chats'), {
                 description,
                 userId,
+                comment,
+                like,
                 createdAt: new Date(),
                 // Add other fields as necessary
             })

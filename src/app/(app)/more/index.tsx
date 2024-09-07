@@ -1,16 +1,19 @@
 import { Entypo } from '@expo/vector-icons'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { Stack } from 'expo-router'
+import { router } from 'expo-router'
 import { TouchableOpacity } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 import { ScrollView, YStack, Text, XStack, View, YGroup, Separator } from 'tamagui'
 
+import { appPath } from '@/common/configs'
+import { BoxDetailItemProps } from '@/components/core/BoxDetailItem'
 import { ListUser } from '@/components/core/ListUser'
 import { ListUserController } from '@/components/core/ListUserController'
 import { ListController } from '@/components/core/ListUserController/ListUserControllerOptions'
 import { HeaderSignOut } from '@/components/layout/HeaderSignOut'
 import { ScreenTemplate } from '@/components/template/ScreenTemplate'
-
+import { useProtectedRoute } from '@/hooks/useProtectedRoute'
 export default function MorePage() {
     return (
         <ScreenTemplate
@@ -40,7 +43,7 @@ export default function MorePage() {
                         <YGroup backgroundColor="#171717" height={120} borderRadius={8} mt={10}>
                             {ListController.map((item, index) => (
                                 <YGroup.Item key={index}>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={() => router.push(appPath.more.config as never)}>
                                         <ListUserController
                                             text={item.text}
                                             icon={item.icon}

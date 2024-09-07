@@ -20,6 +20,8 @@ export const appPath = {
         newchat: '/chat/newChat',
     },
 
-    more: '/more',
+    more: {
+        index: '/more/Config',
+    },
     filter: '/filter',
 }

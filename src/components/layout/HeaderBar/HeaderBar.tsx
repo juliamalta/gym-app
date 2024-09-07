@@ -23,6 +23,9 @@ export default function HeaderBar({ title }: { title?: string }) {
 
     const [userEmail, setUserEmail] = useState<string | null>(null)
 
+    const user = auth.currentUser
+    const userId = user ? user.email : 'Guest'
+
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user) {
@@ -87,7 +90,7 @@ export default function HeaderBar({ title }: { title?: string }) {
                             <Avatar.Fallback backgroundColor="$gray5" />
                         </Avatar>
                         <Text fontSize={20} color="white" pl={10}>
-                            Hi, {userEmail ? userEmail : 'Guest'}
+                            Hi, {userId}
                         </Text>
                     </XStack>
                     <View ml="auto" pt={40}>
