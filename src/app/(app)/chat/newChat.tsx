@@ -50,7 +50,7 @@ export default function NewChat() {
             }}>
             <XStack f={1} p={16} alignItems="center" justifyContent="center" bg="#0a0a0a">
                 {formVisible ? (
-                    <YStack w="100%" h={400} p={16} bg="#171717" borderRadius={8}>
+                    <YStack w="100%" minHeight={400} h={400} p={16} bg="#171717" borderRadius={8}>
                         <XStack justifyContent="space-between" ai="center">
                             <TouchableOpacity onPress={() => setFormVisible(false)}>
                                 <Text color="#60a5fa">Cancel</Text>
