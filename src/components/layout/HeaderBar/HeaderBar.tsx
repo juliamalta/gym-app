@@ -3,7 +3,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { Link, usePathname } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useAtomValue } from 'jotai'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Text, View, XStack, YStack } from 'tamagui'
 import { Avatar } from 'tamagui'
@@ -13,11 +13,27 @@ import useAtomWithModal from '@/hooks/useAtomWithModal'
 import { appStore } from '@/store/app.atoms'
 import { modalStore } from '@/store/modal.atoms'
 
+import { auth } from '../../../firebaseConfig' // import your Firebase config
+
 export default function HeaderBar({ title }: { title?: string }) {
     const { isOpened, toggle } = useAtomWithModal(modalStore.orgModalAtom)
     const selectOrg = useAtomValue(appStore.selectedOrg)
     const pathname = usePathname()
     const insets = useSafeAreaInsets()
+
+    const [userEmail, setUserEmail] = useState<string | null>(null)
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                setUserEmail(user.email) // Set the user's email if logged in
+            } else {
+                setUserEmail(null) // No user logged in
+            }
+        })
+
+        return () => unsubscribe() // Cleanup subscription on unmount
+    }, [])
 
     return (
         <XStack
@@ -71,7 +87,7 @@ export default function HeaderBar({ title }: { title?: string }) {
                             <Avatar.Fallback backgroundColor="$gray5" />
                         </Avatar>
                         <Text fontSize={20} color="white" pl={10}>
-                            Hi, User
+                            Hi, {userEmail ? userEmail : 'Guest'}
                         </Text>
                     </XStack>
                     <View ml="auto" pt={40}>

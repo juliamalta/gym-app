@@ -102,7 +102,7 @@ export default function Chat() {
                                 </Avatar>
                                 <YStack pt={10}>
                                     <Text textAlign="left" color="white">
-                                        name.User
+                                        {item.userId}
                                     </Text>
                                     <Text textAlign="left" color="white">
                                         {item.description}

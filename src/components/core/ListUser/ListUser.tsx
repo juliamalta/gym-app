@@ -1,11 +1,27 @@
 import AntDesign from '@expo/vector-icons/AntDesign'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+import React, { useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { XStack, Text, Avatar, View, YStack } from 'tamagui'
 
 import { ListUserProps } from '@/components/core/ListUser/ListUser.types'
 
+import { auth } from '../../../firebaseConfig'
 export default function ListUser({ name, email }: ListUserProps) {
+    const [userEmail, setUserEmail] = useState<string | null>(null)
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                setUserEmail(user.email) // Set the user's email if logged in
+            } else {
+                setUserEmail(null) // No user logged in
+            }
+        })
+
+        return () => unsubscribe() // Cleanup subscription on unmount
+    }, [])
+
     const avatarImage = require('../../../../assets/avatar.png')
     return (
         <YStack
@@ -35,7 +51,7 @@ export default function ListUser({ name, email }: ListUserProps) {
                 <Text fontSize={20} lineHeight={24} fontWeight="500" color="white">
                     {name}
                 </Text>
-                <Text color="white">{email}</Text>
+                <Text color="white">{userEmail ? userEmail : 'Guest'}</Text>
             </View>
         </YStack>
     )

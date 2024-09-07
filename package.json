@@ -28,6 +28,7 @@
         "@tamagui/babel-plugin": "^1.92.1",
         "@tamagui/config": "^1.92.1",
         "@tamagui/font-inter": "^1.92.1",
+        "@tamagui/image": "^1.110.2",
         "@tamagui/lucide-icons": "^1.92.1",
         "@tamagui/metro-plugin": "^1.92.1",
         "@tamagui/theme-base": "^1.92.1",

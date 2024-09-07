@@ -1,38 +1,54 @@
+import { Feather } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import React from 'react'
 import { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { Separator, YStack, YGroup } from 'tamagui'
 
+import { appPath } from '@/common/configs/paths.config'
+import { BoxDetailItemProps } from '@/components/core/BoxDetailItem'
+import { CardsOption } from '@/components/core/CardsOption'
 import CardTrainer from '@/components/core/CardTrainer/CardTrainer'
 import { ListItem } from '@/components/core/ListItem'
 import { ListProject } from '@/components/core/ListItem/ListItemOptions'
 import { SearchItem } from '@/components/core/SearchItem'
-
+import { useProtectedRoute } from '@/hooks/useProtectedRoute'
 export default function ProjectPage() {
-    const [searchText, setSearchText] = useState('') // Estado para o texto de pesquisa
-    const [filteredProjects, setFilteredProjects] = useState(ListProject) // Estado para projetos filtrados inicialmente definido como a lista completa
-    console.log(searchText)
-    // Função para filtrar os projetos com base no texto de pesquisa
-    const filterProjects = (text) => {
-        const filtered = ListProject.filter((item) => item.name.toLowerCase().includes(text.toLowerCase()))
-        setFilteredProjects(filtered)
-        setSearchText(text) // Atualiza o texto de pesquisa no estado
-    }
-    const handleCancel = () => {
-        setSearchText('')
-        setFilteredProjects(ListProject)
-    }
-
+    useProtectedRoute()
+    const menuBox: BoxDetailItemProps[] = [
+        {
+            link: appPath.notifications,
+            icon: <Feather color="white" name="bell" size={24} />,
+            name: 'Leg',
+            desc: 'Training of leg',
+        },
+        {
+            link: appPath.notifications,
+            icon: <Feather color="white" name="bell" size={24} />,
+            name: 'Shoulders',
+            desc: 'Training of Shoulders',
+        },
+        {
+            link: appPath.notifications,
+            icon: <Feather color="white" name="bell" size={24} />,
+            name: 'Biceps',
+            desc: 'Training of Biceps',
+        },
+        {
+            link: appPath.notifications,
+            icon: <Feather color="white" name="bell" size={24} />,
+            name: 'Coast',
+            desc: 'Training of Coast',
+        },
+    ]
     return (
         <YStack paddingBottom={8}>
-            <YStack>
-                <SearchItem onSearch={filterProjects} onCancel={handleCancel} />
-            </YStack>
             <YGroup gap={20} pt={16}>
-                {filteredProjects.map((item, index) => (
+                {menuBox.map((item, index) => (
                     <YGroup.Item key={index}>
-                        <TouchableOpacity onPress={() => router.push(item.link as never)}></TouchableOpacity>
+                        <TouchableOpacity onPress={() => router.push(item.link as never)}>
+                            <CardsOption name={item.name} desc={item.desc} />
+                        </TouchableOpacity>
                     </YGroup.Item>
                 ))}
             </YGroup>

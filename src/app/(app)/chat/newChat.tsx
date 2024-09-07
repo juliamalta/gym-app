@@ -7,11 +7,15 @@ import { XStack, YStack, Text } from 'tamagui'
 import ChatHeader from '@/components/layout/ChatHeader/ChatHeader'
 import { ScreenTemplate } from '@/components/template/ScreenTemplate'
 
+import { auth } from '../../../firebaseConfig'
 import { database } from '../../../firebaseConfig'
 
 export default function NewChat() {
     const [description, setDescription] = useState('')
     const [formVisible, setFormVisible] = useState(true) // Start with form visible
+
+    const user = auth.currentUser
+    const userId = user ? user.email : null
 
     const addChat = async () => {
         if (!description.trim()) {
@@ -22,6 +26,7 @@ export default function NewChat() {
         try {
             await addDoc(collection(database, 'Chats'), {
                 description,
+                userId,
                 createdAt: new Date(),
                 // Add other fields as necessary
             })

@@ -11,7 +11,6 @@ export function useProtectedRoute() {
     const rootNavigation = useRootNavigation()
 
     const isAuthenticated = true
-
     useEffect(() => {
         if (!rootNavigation?.isReady()) {
             return
