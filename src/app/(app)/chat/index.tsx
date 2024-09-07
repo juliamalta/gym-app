@@ -172,29 +172,43 @@ export default function Chat() {
                                             }}>
                                             <View style={styles.centeredView}>
                                                 <View style={styles.modalView}>
-                                                    <Text style={styles.modalText}>What you comment about This</Text>
-                                                    <TextInput
-                                                        value={comment}
-                                                        onChangeText={setComment}
-                                                        placeholder="Enter your comment"
-                                                        style={{
-                                                            padding: 10,
-                                                            backgroundColor: '#f1f1f1',
-                                                            borderRadius: 8,
-                                                            marginBottom: 20,
-                                                            width: 300,
-                                                        }}
-                                                    />
-                                                    <TouchableOpacity style={styles.button} onPress={addChat}>
-                                                        <Text fontSize={16} color="#ffff">
-                                                            Add Comment
-                                                        </Text>
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                                                    <XStack jc="space-between" ai="center">
                                                         <XStack>
-                                                            <Text style={styles.textStyle}>Fechar</Text>
+                                                            <TouchableOpacity
+                                                                onPress={() => setModalVisible(!modalVisible)}>
+                                                                <Text style={styles.textStyle}>Fechar</Text>
+                                                            </TouchableOpacity>
                                                         </XStack>
-                                                    </TouchableOpacity>
+                                                        <XStack>
+                                                            <TouchableOpacity style={styles.button} onPress={addChat}>
+                                                                <Text fontSize={16} color="#ffff">
+                                                                    Add Comment
+                                                                </Text>
+                                                            </TouchableOpacity>
+                                                        </XStack>
+                                                    </XStack>
+                                                    <XStack ml={16}>
+                                                        <Avatar size={40} circular space="$2">
+                                                            <Avatar.Image
+                                                                accessibilityLabel="Cam"
+                                                                src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
+                                                            />
+                                                            <Avatar.Fallback backgroundColor="$gray5" />
+                                                        </Avatar>
+                                                        <TextInput
+                                                            value={comment}
+                                                            onChangeText={setComment}
+                                                            placeholder="Enter your comment"
+                                                            style={{
+                                                                padding: 10,
+                                                                backgroundColor: 'transparent',
+                                                                borderRadius: 8,
+                                                                marginBottom: 20,
+                                                                width: 300,
+                                                                color: '#fafaf9',
+                                                            }}
+                                                        />
+                                                    </XStack>
                                                 </View>
                                             </View>
                                         </Modal>
@@ -237,14 +251,13 @@ const styles = StyleSheet.create({
     centeredView: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
         marginTop: 22,
     },
     modalView: {
         margin: 20,
         backgroundColor: '#262626',
         borderRadius: 20,
-        padding: 35,
+        padding: 50,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
@@ -260,16 +273,14 @@ const styles = StyleSheet.create({
         padding: 10,
         elevation: 2,
     },
-    buttonOpen: {
-        backgroundColor: '#F194FF',
-    },
-    buttonClose: {
-        backgroundColor: '#2196F3',
-    },
+
     textStyle: {
-        color: 'white',
+        color: '#60a5fa',
         fontWeight: 'bold',
-        textAlign: 'center',
+        justifyContent: 'space-between',
+    },
+    textInput: {
+        backgroundColor: 'transparent',
     },
     modalText: {
         marginBottom: 15,
