@@ -79,57 +79,65 @@ export default function Config() {
             }}>
             <Stack.Screen />
 
-            <YStack bg="#0a0a0a" width="100%" height="100%" f={1} p={16}>
-                <YStack ai="center">
-                    <YStack
-                        borderRadius={8}
-                        width="100%"
-                        paddingTop={8}
-                        paddingRight={16}
-                        paddingBottom={8}
-                        paddingLeft={8}
-                        jc="space-evenly"
-                        ac="center"
-                        ai="center">
-                        <XStack>
-                            <TouchableOpacity>
-                                <Avatar size={90} circular space="$2">
-                                    <Avatar.Image
-                                        accessibilityLabel="Cam"
-                                        src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
-                                    />
-                                    <Avatar.Fallback backgroundColor="$gray5" />
-                                </Avatar>
-                                <XStack jc="center" pt={16}>
-                                    <AntDesign name="upload" size={24} color="white" />
-                                </XStack>
-                            </TouchableOpacity>
+            <YStack bg="#0a0a0a" width="100%" height="100%" f={1}>
+                <YStack>
+                    <Text color="white" fontSize={20} textAlign="center">
+                        Edit my profile
+                    </Text>
+                </YStack>
+                <YStack bg="#262626" minHeight={200} mt={16}>
+                    <YStack pt={16}>
+                        <XStack jc="center">
+                            <Avatar size={80} circular space="$2">
+                                <Avatar.Image
+                                    accessibilityLabel="Cam"
+                                    src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
+                                />
+                                <Avatar.Fallback backgroundColor="$gray5" />
+                            </Avatar>
                         </XStack>
-                        <YStack ai="center" pt={7}>
+                        <YStack mt={16}>
                             <Text fontSize={20} lineHeight={24} fontWeight="500" color="white" textAlign="center">
                                 {userConfig ? userConfig.name : 'No name set'}
                             </Text>
-                            <Text color="white">{userEmail ? userEmail : 'Guest'}</Text>
+                            <Text color="white" textAlign="center">
+                                {userEmail ? userEmail : 'Guest'}
+                            </Text>
                         </YStack>
                     </YStack>
-                    <YStack pt={20}>
-                        <Text color="white">Name User :</Text>
+                </YStack>
+                <YStack>
+                    <YStack p={16}>
+                        <YStack p={16}>
+                            <Text color="white" textAlign="left">
+                                Display name
+                            </Text>
+                        </YStack>
                         <TextInput
                             value={name}
                             onChangeText={setName}
                             placeholder="Enter your name user ex: @user"
+                            placeholderTextColor="white"
                             style={{
                                 padding: 10,
-                                backgroundColor: '#f1f1f1',
+                                color: 'white',
+                                backgroundColor: '#262626',
                                 borderRadius: 8,
                                 marginBottom: 10,
                                 width: 350,
                             }}
                         />
-                        <TouchableOpacity style={styles.button} onPress={changeName}>
-                            <FontAwesome5 name="save" size={24} color="white" />
-                        </TouchableOpacity>
                     </YStack>
+                    <XStack p={16}>
+                        <TouchableOpacity style={styles.button} onPress={changeName}>
+                            <Text color="white">Save Changes</Text>
+                        </TouchableOpacity>
+                    </XStack>
+                    <XStack p={16} m="auto">
+                        <TouchableOpacity>
+                            <Text color="#3b82f6">Cancel</Text>
+                        </TouchableOpacity>
+                    </XStack>
                 </YStack>
             </YStack>
         </ScreenTemplate>
@@ -138,11 +146,12 @@ export default function Config() {
 
 const styles = StyleSheet.create({
     button: {
-        width: 80,
-        backgroundColor: '#3b0764', // Purple color
-        padding: 15,
-        borderRadius: 8,
-        marginLeft: 'auto',
+        width: '100%',
+        backgroundColor: '#262626', // Purple color
+        padding: 16,
+
+        borderRadius: 40,
+        marginRight: 'auto',
         alignContent: 'center',
         alignItems: 'center',
         marginBottom: 10,
