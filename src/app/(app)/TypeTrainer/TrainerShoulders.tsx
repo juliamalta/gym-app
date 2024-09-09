@@ -1,15 +1,15 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { collection, onSnapshot, deleteDoc, query, where, QuerySnapshot, updateDoc, addDoc } from 'firebase/firestore'
 import { useState, useEffect } from 'react'
 import { FlatList } from 'react-native'
 import { Text, XStack, YStack, XGroup } from 'tamagui'
 
-import { CardProps } from '@/components/core/Card/Card.types'
+import { HeaderSignOut } from '@/components/layout/HeaderSignOut'
+import { ScreenTemplate } from '@/components/template/ScreenTemplate'
 
-import { database } from '../../../firebaseConfig'
+import { auth, database } from '../../../firebaseConfig'
 
-export default function Card() {
+export default function TrainerShoulders() {
     const [trainer, setTrainer] = useState('')
 
     useEffect(() => {
@@ -31,8 +31,17 @@ export default function Card() {
     }, [])
 
     return (
-        <XGroup>
-            <XStack width="100%">
+        <ScreenTemplate
+            options={{
+                title: 'Chat',
+                header: () => <HeaderSignOut title={'My Training'} />,
+            }}>
+            <YStack f={1} p={16} bg="#0a0a0a" width="100%">
+                <XStack p={16}>
+                    <Text fontSize={20} color="white" textAlign="center" ac="center">
+                        Training Biceps
+                    </Text>
+                </XStack>
                 <FlatList
                     showsHorizontalScrollIndicator={false}
                     data={trainer}
@@ -48,19 +57,19 @@ export default function Card() {
                             style={{ width: '100%' }}
                             borderRadius={8}>
                             <XStack gap={10}>
+                                <XStack>
+                                    <MaterialCommunityIcons name="weight-lifter" size={48} color="white" />
+                                </XStack>
                                 <YStack ac="center">
                                     <Text textAlign="left" color="white">
                                         {item.name}
                                     </Text>
                                 </YStack>
                             </XStack>
-                            <XStack>
-                                <MaterialCommunityIcons name="weight-lifter" size={28} color="white" />
-                            </XStack>
                         </XStack>
                     )}
                 />
-            </XStack>
-        </XGroup>
+            </YStack>
+        </ScreenTemplate>
     )
 }

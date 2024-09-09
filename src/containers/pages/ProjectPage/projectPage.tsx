@@ -17,25 +17,25 @@ export default function ProjectPage() {
     useProtectedRoute()
     const menuBox: BoxDetailItemProps[] = [
         {
-            link: appPath.notifications,
+            link: appPath.TypeTrainer.leg,
             icon: <Feather color="white" name="bell" size={24} />,
             name: 'Leg',
             desc: 'Training of leg',
         },
         {
-            link: appPath.notifications,
+            link: appPath.TypeTrainer.shoulders,
             icon: <Feather color="white" name="bell" size={24} />,
             name: 'Shoulders',
             desc: 'Training of Shoulders',
         },
         {
-            link: appPath.notifications,
+            link: appPath.TypeTrainer.index,
             icon: <Feather color="white" name="bell" size={24} />,
             name: 'Biceps',
             desc: 'Training of Biceps',
         },
         {
-            link: appPath.notifications,
+            link: appPath.TypeTrainer.coast,
             icon: <Feather color="white" name="bell" size={24} />,
             name: 'Coast',
             desc: 'Training of Coast',

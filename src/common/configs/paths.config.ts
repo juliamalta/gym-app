@@ -23,5 +23,11 @@ export const appPath = {
     more: {
         index: '/more/Config',
     },
+    TypeTrainer: {
+        index: '/TypeTrainer/TrainerBiceps',
+        leg: '/TypeTrainer/TrainnerLeg',
+        shoulders: '/TypeTrainer/TrainerShoulders',
+        coast: '/TypeTrainer/TrainerCoast',
+    },
     filter: '/filter',
 }

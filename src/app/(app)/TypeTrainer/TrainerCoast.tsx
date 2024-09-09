@@ -1,20 +1,20 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { collection, onSnapshot, deleteDoc, query, where, QuerySnapshot, updateDoc, addDoc } from 'firebase/firestore'
 import { useState, useEffect } from 'react'
 import { FlatList } from 'react-native'
 import { Text, XStack, YStack, XGroup } from 'tamagui'
 
-import { CardProps } from '@/components/core/Card/Card.types'
+import { HeaderSignOut } from '@/components/layout/HeaderSignOut'
+import { ScreenTemplate } from '@/components/template/ScreenTemplate'
 
-import { database } from '../../../firebaseConfig'
+import { auth, database } from '../../../firebaseConfig'
 
-export default function Card() {
+export default function TrainerCoast() {
     const [trainer, setTrainer] = useState('')
 
     useEffect(() => {
         // Reference to the 'Chats' collection
-        const chatCollectionRef = collection(database, 'TrainerBiceps')
+        const chatCollectionRef = collection(database, 'TrainerCoast')
 
         // Set up the real-time listener
         const unsubscribe = onSnapshot(chatCollectionRef, (querySnapshot) => {
@@ -31,8 +31,17 @@ export default function Card() {
     }, [])
 
     return (
-        <XGroup>
-            <XStack width="100%">
+        <ScreenTemplate
+            options={{
+                title: 'Chat',
+                header: () => <HeaderSignOut title={'My Training'} />,
+            }}>
+            <YStack f={1} p={16} bg="#0a0a0a" width="100%">
+                <XStack p={16}>
+                    <Text fontSize={20} color="white" textAlign="center" ac="center">
+                        Training Coast
+                    </Text>
+                </XStack>
                 <FlatList
                     showsHorizontalScrollIndicator={false}
                     data={trainer}
@@ -60,7 +69,7 @@ export default function Card() {
                         </XStack>
                     )}
                 />
-            </XStack>
-        </XGroup>
+            </YStack>
+        </ScreenTemplate>
     )
 }
