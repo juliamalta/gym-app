@@ -26,6 +26,7 @@ export default function NavigationBar() {
                     color={pathname === appPath.projects.index ? '#4f46e5' : 'white'}
                 />
             ),
+
             title: 'Exercícios',
         },
         {

@@ -29,5 +29,12 @@ export const appPath = {
         shoulders: '/TypeTrainer/TrainerShoulders',
         coast: '/TypeTrainer/TrainerCoast',
     },
+
+    Training: {
+        index: '/Training/TrainingA',
+        TrainingB: '/Training/TrainingB',
+        TrainingC: '/Training/TrainingC',
+        TrainingD: '/Training/TrainingD',
+    },
     filter: '/filter',
 }

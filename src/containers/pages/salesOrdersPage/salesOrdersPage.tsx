@@ -8,11 +8,12 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { FlatList } from 'react-native'
-import { Separator, YStack, YGroup, XStack, Text } from 'tamagui'
+import { Separator, YStack, YGroup, XStack, Text, XGroup } from 'tamagui'
 
 import { appPath } from '@/common/configs/paths.config'
 import { BoxDetailItemProps } from '@/components/core/BoxDetailItem'
 import { Card } from '@/components/core/Card'
+import CardSeries from '@/components/core/CardSeries/CardSeries'
 import { ListItem } from '@/components/core/ListItem'
 import { ListSales } from '@/components/core/ListItem/ListItemOptions'
 import { SearchItem } from '@/components/core/SearchItem'
@@ -29,6 +30,27 @@ export default function SalesOrdersPage() {
             link: appPath.salesOrders.serie,
             icon: <Ionicons name="add-circle" size={60} color="#3b0764" />,
             title: 'Notifications',
+        },
+    ]
+
+    useProtectedRoute()
+    const itens: BoxDetailItemProps[] = [
+        {
+            link: appPath.Training.index,
+            name: 'Training A',
+        },
+        {
+            link: appPath.Training.TrainingB,
+
+            name: 'Training B',
+        },
+        {
+            link: appPath.Training.TrainingC,
+            name: 'Training C',
+        },
+        {
+            link: appPath.Training.TrainingD,
+            name: 'Training D',
         },
     ]
     const [serie, setSerie] = useState([])
@@ -63,51 +85,17 @@ export default function SalesOrdersPage() {
                 title: 'Chat',
                 header: () => <ChatHeader title={'My Training'} />,
             }}>
-            <YStack f={1} mr="auto" p={16} bg="#0a0a0a">
+            <YStack f={1} p={16} bg="#0a0a0a">
                 <XStack p={16}>
                     <Text fontSize={20} color="white">
                         Create a training or consult your training
                     </Text>
                 </XStack>
-                <FlatList
-                    showsHorizontalScrollIndicator={false}
-                    data={serie}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                        <XStack
-                            ml="auto"
-                            p={16}
-                            mt={10}
-                            jc="space-between"
-                            f={1}
-                            bg="#171717"
-                            style={{ width: '100%' }}
-                            borderRadius={8}>
-                            <XStack gap={10}>
-                                <XStack>
-                                    <MaterialCommunityIcons name="weight-lifter" size={48} color="white" />
-                                </XStack>
-                                <YStack ac="center">
-                                    <Text textAlign="left" color="white">
-                                        {item.name}
-                                    </Text>
-                                    <Text textAlign="left" color="white">
-                                        {item.description}
-                                    </Text>
-                                </YStack>
-                            </XStack>
-
-                            <XStack ai="center">
-                                <MaterialIcons name="more-vert" size={24} color="white" />
-                            </XStack>
-                        </XStack>
-                    )}
-                />
-                <YGroup gap={20} pt={16} mb={20} ac="flex-end" ml="auto">
-                    {menuBox.map((item, index) => (
+                <YGroup gap={30}>
+                    {itens.map((item, index) => (
                         <YGroup.Item key={index}>
                             <TouchableOpacity onPress={() => router.push(item.link as never)}>
-                                {item.icon}
+                                <CardSeries name={item.name} />
                             </TouchableOpacity>
                         </YGroup.Item>
                     ))}
