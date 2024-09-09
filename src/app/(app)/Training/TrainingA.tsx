@@ -1,6 +1,17 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
-import { collection, onSnapshot, deleteDoc, query, where, QuerySnapshot, updateDoc, addDoc } from 'firebase/firestore'
+import { getItem } from 'expo-secure-store'
+import {
+    collection,
+    onSnapshot,
+    deleteDoc,
+    query,
+    where,
+    QuerySnapshot,
+    updateDoc,
+    addDoc,
+    doc,
+} from 'firebase/firestore'
 import { useState, useEffect } from 'react'
 import { FlatList } from 'react-native'
 import { TouchableOpacity } from 'react-native'
@@ -64,6 +75,14 @@ export default function TrainingA() {
         }
     }
 
+    const handleDelete = async (TrainingId) => {
+        try {
+            await deleteDoc(doc(database, 'TrainingA', TrainingId))
+            console.log('Chat deleted successfully')
+        } catch (error) {
+            console.error('Error deleting chat:', error)
+        }
+    }
     return (
         <ScreenTemplate
             options={{
@@ -81,22 +100,32 @@ export default function TrainingA() {
                         Add your Exercicios
                     </Text>
                 </XStack>
+
                 <FlatList
                     showsHorizontalScrollIndicator={false}
                     data={trainingA}
                     keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                        <YStack bg="#404040" p={16} borderRadius={10} mt={16}>
-                            <YStack>
-                                <Text color="white">{item.exercise}</Text>
-                            </YStack>
-                            <XStack gap={12}>
-                                <Text color="white">{item.qntSerie} series</Text>
-                                <Text color="white">{item.qntRepeticao} repetition</Text>
+                    renderItem={({ item }) =>
+                        userId === item.userId && ( // Verifica se o item pertence ao usuário logado
+                            <XStack bg="#404040" p={16} borderRadius={10} mt={16} f={1} jc="space-between">
+                                <YStack>
+                                    <YStack>
+                                        <Text color="white">{item.exercise}</Text>
+                                    </YStack>
+                                    <XStack gap={12}>
+                                        <Text color="white">{item.qntSerie} series</Text>
+                                        <Text color="white">{item.qntRepeticao} repetition</Text>
+                                    </XStack>
+                                </YStack>
+
+                                <TouchableOpacity onPress={() => handleDelete(item.id)}>
+                                    <MaterialCommunityIcons name="delete" size={24} color="red" />
+                                </TouchableOpacity>
                             </XStack>
-                        </YStack>
-                    )}
+                        )
+                    }
                 />
+
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
                     <XStack ml="auto">
                         <MaterialIcons name="add-circle" size={48} color="white" />
