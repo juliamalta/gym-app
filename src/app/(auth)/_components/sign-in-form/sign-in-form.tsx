@@ -59,7 +59,6 @@ const App = () => {
                 mt={8}
                 fontWeight="500"
                 height={50}
-                borderRadius={10}
                 backgroundColor="$secondary"
                 pressStyle={{ backgroundColor: '$colors.secondary50' }}
                 color="white"
@@ -92,7 +91,6 @@ const styles = StyleSheet.create({
     input: {
         height: 50,
         borderColor: '#ddd',
-        borderRadius: 20,
         borderWidth: 1,
         marginBottom: 16,
         paddingHorizontal: 8,

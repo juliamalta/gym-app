@@ -1,3 +1,4 @@
+import { FontAwesome } from '@expo/vector-icons'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { getItem } from 'expo-secure-store'
@@ -119,7 +120,7 @@ export default function TrainingB() {
                                 </YStack>
 
                                 <TouchableOpacity onPress={() => handleDelete(item.id)}>
-                                    <MaterialCommunityIcons name="delete" size={24} color="red" />
+                                    <FontAwesome name="trash" size={23} color="#f92e64"></FontAwesome>
                                 </TouchableOpacity>
                             </XStack>
                         )

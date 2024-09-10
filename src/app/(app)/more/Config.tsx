@@ -1,23 +1,28 @@
 import { Entypo } from '@expo/vector-icons'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
+import * as ImagePicker from 'expo-image-picker'
 import { Stack } from 'expo-router'
-import { collection, addDoc, query, where } from 'firebase/firestore'
-import { onSnapshot } from 'firebase/firestore'
+import { getItem } from 'expo-secure-store'
+import { collection, addDoc, query, where, onSnapshot } from 'firebase/firestore'
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { useState, useEffect } from 'react'
-import { TouchableOpacity, TextInput, StyleSheet, Alert, ScrollView, View } from 'react-native'
+import { TouchableOpacity, TextInput, StyleSheet, Alert, View, Image } from 'react-native'
+import { FlatList } from 'react-native'
 import { Avatar, YStack, Text, XStack } from 'tamagui'
 
 import { HeaderSignOut } from '@/components/layout/HeaderSignOut'
 import { ScreenTemplate } from '@/components/template/ScreenTemplate'
 
-import { auth, database } from '../../../firebaseConfig'
+import { auth, database, storage } from '../../../firebaseConfig'
 
 export default function Config() {
     const [name, setName] = useState('')
-    const [userConfig, setUserConfig] = useState(null) // Store a single user's config
+    const [userConfig, setUserConfig] = useState(null)
     const [userEmail, setUserEmail] = useState<string | null>(null)
-
+    const [image, setImage] = useState('')
+    const [progress, setProgress] = useState(0)
+    const [files, setFiles] = useState<any[]>([])
     const user = auth.currentUser
     const userId = user ? user.email : null
 
@@ -62,7 +67,7 @@ export default function Config() {
             })
 
             if (userData.length > 0) {
-                setUserConfig(userData[0]) // Assuming one config per user
+                setUserConfig(userData[0])
             } else {
                 setUserConfig(null)
             }
@@ -70,6 +75,74 @@ export default function Config() {
 
         return () => unsubscribe()
     }, [userId])
+    useEffect(() => {
+        const unsubscribe = onSnapshot(collection(database, 'files'), (snapshot) => {
+            const updatedFiles = []
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === 'added') {
+                    const file = change.doc.data()
+                    if (file.userId === userId) {
+                        // Only include files for the current user
+                        updatedFiles.push(file)
+                    }
+                }
+            })
+            setFiles(updatedFiles)
+        })
+
+        return () => unsubscribe()
+    }, [userId])
+    async function pickImage() {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [3, 4],
+            quality: 1,
+        })
+        if (!result.canceled) {
+            setImage(result.assets[0].uri)
+            await uploadImage(result.assets[0].uri, 'image')
+        }
+    }
+
+    async function uploadImage(uri, fileType) {
+        const response = await fetch(uri)
+        const blob = await response.blob()
+        const storageRef = ref(storage, 'UserImage/' + new Date().getTime())
+        const uploadTask = uploadBytesResumable(storageRef, blob)
+
+        uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                console.log('Upload is ' + progress + '% done')
+                setProgress(progress.toFixed())
+            },
+            (error) => {
+                console.error('Upload failed:', error)
+            },
+            async () => {
+                const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
+                console.log('File Available at', downloadURL)
+                await saveRecord(fileType, downloadURL, new Date().toISOString())
+                setImage('')
+            }
+        )
+    }
+
+    async function saveRecord(fileType, url, createdAt) {
+        try {
+            const docRef = await addDoc(collection(database, 'files'), {
+                fileType,
+                url,
+                createdAt,
+                userId,
+            })
+            console.log('Document saved correctly', docRef.id)
+        } catch (e) {
+            console.error('Error saving document:', e)
+        }
+    }
 
     return (
         <ScreenTemplate
@@ -87,15 +160,36 @@ export default function Config() {
                 </YStack>
                 <YStack bg="#262626" minHeight={200} mt={16}>
                     <YStack pt={16}>
-                        <XStack jc="center">
-                            <Avatar size={80} circular space="$2">
-                                <Avatar.Image
-                                    accessibilityLabel="Cam"
-                                    src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
-                                />
-                                <Avatar.Fallback backgroundColor="$gray5" />
-                            </Avatar>
-                        </XStack>
+                        <YStack jc="center" ai="center">
+                            <FlatList
+                                data={files}
+                                keyExtractor={(item) => item.url} // Ensure 'url' is unique
+                                renderItem={({ item }) => (
+                                    <XStack>
+                                        {userId === item.userId ? ( // Check if the item belongs to the current user
+                                            <Avatar circular size="$10">
+                                                <Avatar.Image accessibilityLabel="User image" src={{ uri: item.url }} />
+                                                <Avatar.Fallback backgroundColor="$blue10" />
+                                            </Avatar>
+                                        ) : (
+                                            <Avatar circular size="$10">
+                                                <Avatar.Image
+                                                    accessibilityLabel="Default image"
+                                                    src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
+                                                />
+                                                <Avatar.Fallback backgroundColor="$blue10" />
+                                            </Avatar>
+                                        )}
+                                    </XStack>
+                                )}
+                            />
+
+                            <XStack pt={5}>
+                                <TouchableOpacity onPress={pickImage}>
+                                    <AntDesign name="upload" size={24} color="white" />
+                                </TouchableOpacity>
+                            </XStack>
+                        </YStack>
                         <YStack mt={16}>
                             <Text fontSize={20} lineHeight={24} fontWeight="500" color="white" textAlign="center">
                                 {userConfig ? userConfig.name : 'No name set'}
@@ -147,12 +241,9 @@ export default function Config() {
 const styles = StyleSheet.create({
     button: {
         width: '100%',
-        backgroundColor: '#262626', // Purple color
+        backgroundColor: '#262626', // Dark background color
         padding: 16,
-
         borderRadius: 40,
-        marginRight: 'auto',
-        alignContent: 'center',
         alignItems: 'center',
         marginBottom: 10,
     },

@@ -15,7 +15,7 @@ export default function SignInHeader() {
             </View>
             <View ai="center">
                 <Text alignItems="center" fontWeight="500" fontSize={28} lineHeight={42} color="white">
-                    {t('title')}
+                    GYM TRAINING
                 </Text>
                 <Text alignItems="center" fontSize={16} lineHeight={24} color="white">
                     {t('description')}
