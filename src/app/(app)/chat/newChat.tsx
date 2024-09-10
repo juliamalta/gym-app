@@ -1,7 +1,9 @@
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { collection, addDoc } from 'firebase/firestore'
+import { collection, onSnapshot, deleteDoc, query, where, QuerySnapshot, updateDoc, addDoc } from 'firebase/firestore'
 import React, { useState } from 'react'
+import { useEffect } from 'react'
 import { TouchableOpacity, TextInput, Button, Alert, StyleSheet } from 'react-native'
+import { FlatList } from 'react-native'
 import { XStack, YStack, Text } from 'tamagui'
 import { Avatar } from 'tamagui'
 
@@ -9,14 +11,14 @@ import ChatHeader from '@/components/layout/ChatHeader/ChatHeader'
 import { ScreenTemplate } from '@/components/template/ScreenTemplate'
 
 import { auth } from '../../../firebaseConfig'
-import { database } from '../../../firebaseConfig'
+import { database, storage } from '../../../firebaseConfig'
 
 export default function NewChat() {
     const [description, setDescription] = useState('')
     const [comment, setcomment] = useState('')
     const [like, setlike] = useState(0)
     const [formVisible, setFormVisible] = useState(true)
-
+    const [files, setFiles] = useState<any[]>([])
     const user = auth.currentUser
     const userId = user ? user.email : null
 
@@ -41,6 +43,24 @@ export default function NewChat() {
             console.error('Error adding chat:', error)
         }
     }
+    useEffect(() => {
+        const unsubscribe = onSnapshot(collection(database, 'files'), (snapshot) => {
+            const updated = []
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === 'added') {
+                    const file = change.doc.data()
+                    if (file.userId === userId) {
+                        // Only include files for the current user
+                        updated.push(file)
+                    }
+                }
+            })
+            console.log('Updated files:', updated)
+            setFiles(updated)
+        })
+
+        return () => unsubscribe()
+    }, [userId])
 
     return (
         <ScreenTemplate
@@ -62,25 +82,41 @@ export default function NewChat() {
                             </TouchableOpacity>
                         </XStack>
                         <XStack>
-                            <Avatar size={60} circular>
-                                <Avatar.Image
-                                    accessibilityLabel="Cam"
-                                    src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
-                                />
-                                <Avatar.Fallback backgroundColor="$gray5" />
-                            </Avatar>
-                            <TextInput
-                                value={description}
-                                onChangeText={setDescription}
-                                placeholderTextColor="#52525b"
-                                placeholder="What´s up?"
-                                style={{
-                                    padding: 10,
-                                    backgroundColor: 'transparent',
-                                    borderRadius: 8,
-                                    marginBottom: 10,
-                                    color: '#fafaf9',
-                                }}
+                            <FlatList
+                                data={files}
+                                keyExtractor={(item) => item.userId}
+                                renderItem={({ item }) => (
+                                    <XStack>
+                                        {userId === item.userId ? (
+                                            <Avatar circular size="$7">
+                                                <Avatar.Image accessibilityLabel="User image" src={{ uri: item.url }} />
+                                                <Avatar.Fallback backgroundColor="$blue10" />
+                                            </Avatar>
+                                        ) : (
+                                            <Avatar circular size="$8">
+                                                <Avatar.Image
+                                                    accessibilityLabel="Default image"
+                                                    src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
+                                                />
+                                                <Avatar.Fallback backgroundColor="$blue10" />
+                                            </Avatar>
+                                        )}
+                                        <TextInput
+                                            value={description}
+                                            onChangeText={setDescription}
+                                            placeholderTextColor="#52525b"
+                                            placeholder="What´s up?"
+                                            style={{
+                                                padding: 10,
+                                                backgroundColor: 'transparent',
+                                                marginRight: 'auto',
+                                                borderRadius: 8,
+                                                marginBottom: 10,
+                                                color: '#fafaf9',
+                                            }}
+                                        />
+                                    </XStack>
+                                )}
                             />
                         </XStack>
                     </YStack>
