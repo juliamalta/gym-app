@@ -167,7 +167,7 @@ export default function Config() {
                                 renderItem={({ item }) => (
                                     <XStack>
                                         {userId === item.userId ? ( // Check if the item belongs to the current user
-                                            <Avatar circular size="$10">
+                                            <Avatar circular size="$7">
                                                 <Avatar.Image accessibilityLabel="User image" src={{ uri: item.url }} />
                                                 <Avatar.Fallback backgroundColor="$blue10" />
                                             </Avatar>

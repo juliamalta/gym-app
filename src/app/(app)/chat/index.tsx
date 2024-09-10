@@ -29,6 +29,8 @@ export default function Chat() {
             icon: <Entypo name="new-message" size={24} color="white" />,
         },
     ]
+    const [filesImg, setFilesImg] = useState<any[]>([])
+    const [files, setFiles] = useState<any[]>([])
     const [comment, setComment] = useState('')
     const [like, setLike] = useState([])
     const [userConfigs, setUserConfigs] = useState({})
@@ -109,6 +111,56 @@ export default function Chat() {
         }
     }
 
+    useEffect(() => {
+        const unsubscribe = onSnapshot(collection(database, 'files'), (snapshot) => {
+            const userFiles = {}
+
+            snapshot.docChanges().forEach((change) => {
+                const file = change.doc.data()
+
+                if (file.userId) {
+                    // Handle added files
+                    if (change.type === 'added') {
+                        userFiles[file.userId] = file.url
+                    }
+
+                    // Handle modified files
+                    if (change.type === 'modified') {
+                        userFiles[file.userId] = file.url
+                    }
+
+                    // Handle removed files
+                    if (change.type === 'removed') {
+                        delete userFiles[file.userId]
+                    }
+                }
+            })
+
+            console.log('Updated user files:', userFiles)
+            setFiles(userFiles)
+        })
+
+        return () => unsubscribe()
+    }, [])
+    useEffect(() => {
+        const unsubscribe = onSnapshot(collection(database, 'files'), (snapshot) => {
+            const updated = []
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === 'added') {
+                    const file = change.doc.data()
+                    if (file.userId === userId) {
+                        // Only include files for the current user
+                        updated.push(file)
+                    }
+                }
+            })
+            console.log('Updated files:', updated)
+            setFilesImg(updated)
+        })
+
+        return () => unsubscribe()
+    }, [userId])
+
     return (
         <ScreenTemplate
             options={{
@@ -116,27 +168,42 @@ export default function Chat() {
                 header: () => <ChatHeader title={'Social'} />,
             }}>
             <YStack f={1} mr="auto" bg="#0a0a0a">
-                <XGroup gap={20} pt={20} mb={25} ai="center" jc="center" ml={16}>
-                    <Avatar size={60} circular>
-                        <Avatar.Image
-                            accessibilityLabel="Cam"
-                            src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
-                        />
-                        <Avatar.Fallback backgroundColor="$gray5" />
-                    </Avatar>
-                    <YStack>
-                        <Text color="white">{userConfigs[userId] ?? 'User.name'}</Text>
-                        <Text color="white">What´s up?</Text>
-                    </YStack>
-                    <XGroup ai="center" ml="auto" mr={10} p={16}>
-                        {menuBox.map((item, index) => (
-                            <YGroup.Item key={index}>
-                                <TouchableOpacity onPress={() => router.push(item.link as never)}>
-                                    {item.icon}
-                                </TouchableOpacity>
-                            </YGroup.Item>
-                        ))}
-                    </XGroup>
+                <XGroup gap={20} pt={20} mb={25} ml={16}>
+                    <FlatList
+                        data={filesImg}
+                        keyExtractor={(item) => item.userId}
+                        renderItem={({ item }) => (
+                            <XStack>
+                                {userId === item.userId ? (
+                                    <Avatar circular size="$7">
+                                        <Avatar.Image accessibilityLabel="User image" src={{ uri: item.url }} />
+                                        <Avatar.Fallback backgroundColor="$blue10" />
+                                    </Avatar>
+                                ) : (
+                                    <Avatar circular size="$10">
+                                        <Avatar.Image
+                                            accessibilityLabel="Default image"
+                                            src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
+                                        />
+                                        <Avatar.Fallback backgroundColor="$blue10" />
+                                    </Avatar>
+                                )}
+                                <YStack mr="auto" p={16}>
+                                    <Text color="white">{userConfigs[item.userId] ?? 'User.name'}</Text>
+                                    <Text color="white">What’s up?</Text>
+                                </YStack>
+                                <XGroup ai="center" ml="auto" mr={10} p={16}>
+                                    {menuBox.map((item, index) => (
+                                        <YGroup.Item key={index}>
+                                            <TouchableOpacity onPress={() => router.push(item.link as never)}>
+                                                {item.icon}
+                                            </TouchableOpacity>
+                                        </YGroup.Item>
+                                    ))}
+                                </XGroup>
+                            </XStack>
+                        )}
+                    />
                 </XGroup>
 
                 <FlatList
@@ -146,12 +213,15 @@ export default function Chat() {
                     renderItem={({ item }) => (
                         <XStack ml="auto" p={16} mt={3} jc="space-between" f={1} bg="#171717" style={{ width: '100%' }}>
                             <XStack gap={10}>
-                                <Avatar size={50} circular space="$2">
+                                <Avatar circular size="$5">
                                     <Avatar.Image
-                                        accessibilityLabel="Cam"
-                                        src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
+                                        accessibilityLabel="User image"
+                                        src={
+                                            files[item.userId] || // Direct lookup in the files object
+                                            'https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80' // Default image
+                                        }
                                     />
-                                    <Avatar.Fallback backgroundColor="$gray5" />
+                                    <Avatar.Fallback backgroundColor="$blue10" />
                                 </Avatar>
                                 <YStack ac="center">
                                     <Text textAlign="left" color="white">
