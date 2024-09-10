@@ -37,20 +37,19 @@ export default function SalesOrdersPage() {
     const itens: BoxDetailItemProps[] = [
         {
             link: appPath.Training.index,
-            name: 'Training A',
+            name: 'Record A (Ficha A)',
         },
         {
             link: appPath.Training.TrainingB,
-
-            name: 'Training B',
+            name: 'Record B (Ficha B)',
         },
         {
             link: appPath.Training.TrainingC,
-            name: 'Training C',
+            name: 'Record C (Ficha C)',
         },
         {
             link: appPath.Training.TrainingD,
-            name: 'Training D',
+            name: 'Record D (Ficha D)',
         },
     ]
     const [serie, setSerie] = useState([])

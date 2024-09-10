@@ -14,7 +14,7 @@ export default function TrainnerLeg() {
 
     useEffect(() => {
         // Reference to the 'Chats' collection
-        const chatCollectionRef = collection(database, 'TrainerBiceps')
+        const chatCollectionRef = collection(database, 'TrainingLeg')
 
         // Set up the real-time listener
         const unsubscribe = onSnapshot(chatCollectionRef, (querySnapshot) => {
@@ -39,7 +39,7 @@ export default function TrainnerLeg() {
             <YStack f={1} p={16} bg="#0a0a0a" width="100%">
                 <XStack p={16}>
                     <Text fontSize={20} color="white" textAlign="center" ac="center">
-                        Training Biceps
+                        Training Leg
                     </Text>
                 </XStack>
                 <FlatList
@@ -57,9 +57,6 @@ export default function TrainnerLeg() {
                             style={{ width: '100%' }}
                             borderRadius={8}>
                             <XStack gap={10}>
-                                <XStack>
-                                    <MaterialCommunityIcons name="weight-lifter" size={48} color="white" />
-                                </XStack>
                                 <YStack ac="center">
                                     <Text textAlign="left" color="white">
                                         {item.name}

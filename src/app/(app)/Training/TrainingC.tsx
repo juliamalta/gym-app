@@ -98,7 +98,7 @@ export default function TrainingC() {
                 </XStack>
                 <XStack>
                     <Text fontSize={18} color="white" textAlign="center" ac="center">
-                        Add your Exercicios
+                        Add your Exercices
                     </Text>
                 </XStack>
 

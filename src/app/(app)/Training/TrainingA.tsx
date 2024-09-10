@@ -98,7 +98,7 @@ export default function TrainingA() {
                 </XStack>
                 <XStack>
                     <Text fontSize={18} color="white" textAlign="center" ac="center">
-                        Add your Exercicios
+                        Add your Exercises
                     </Text>
                 </XStack>
 
@@ -108,7 +108,7 @@ export default function TrainingA() {
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) =>
                         userId === item.userId && ( // Verifica se o item pertence ao usuário logado
-                            <XStack bg="#404040" p={16} borderRadius={10} mt={16} f={1} jc="space-between">
+                            <XStack bg="#262626" p={16} borderRadius={10} mt={16} f={1} jc="space-between">
                                 <YStack>
                                     <YStack>
                                         <Text color="white">{item.exercise}</Text>

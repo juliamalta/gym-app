@@ -14,7 +14,7 @@ export default function NavigationBar() {
     const navigationItems = [
         {
             link: appPath.dashboard,
-            icon: <Feather name="home" size={24} />,
+            icon: <Entypo name="home" size={24} />,
             title: 'Dashboard',
         },
         {
