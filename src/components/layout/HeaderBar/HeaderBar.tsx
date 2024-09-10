@@ -2,8 +2,10 @@ import { Feather, Octicons } from '@expo/vector-icons'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { Link, usePathname } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { collection, onSnapshot, deleteDoc, query, where, QuerySnapshot, updateDoc, addDoc } from 'firebase/firestore'
 import { useAtomValue } from 'jotai'
 import React, { useEffect, useState } from 'react'
+import { FlatList } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Text, View, XStack, YStack } from 'tamagui'
 import { Avatar } from 'tamagui'
@@ -13,6 +15,7 @@ import useAtomWithModal from '@/hooks/useAtomWithModal'
 import { appStore } from '@/store/app.atoms'
 import { modalStore } from '@/store/modal.atoms'
 
+import { database, storage } from '../../../firebaseConfig'
 import { auth } from '../../../firebaseConfig' // import your Firebase config
 
 export default function HeaderBar({ title }: { title?: string }) {
@@ -20,9 +23,9 @@ export default function HeaderBar({ title }: { title?: string }) {
     const selectOrg = useAtomValue(appStore.selectedOrg)
     const pathname = usePathname()
     const insets = useSafeAreaInsets()
-
+    const [files, setFiles] = useState<any[]>([])
     const [userEmail, setUserEmail] = useState<string | null>(null)
-
+    const [userConfigs, setUserConfigs] = useState({})
     const user = auth.currentUser
     const userId = user ? user.email : 'Guest'
 
@@ -36,6 +39,40 @@ export default function HeaderBar({ title }: { title?: string }) {
         })
 
         return () => unsubscribe() // Cleanup subscription on unmount
+    }, [])
+
+    useEffect(() => {
+        const unsubscribe = onSnapshot(collection(database, 'files'), (snapshot) => {
+            const updated = []
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === 'added') {
+                    const file = change.doc.data()
+                    if (file.userId === userId) {
+                        // Only include files for the current user
+                        updated.push(file)
+                    }
+                }
+            })
+            console.log('Updated files:', updated)
+            setFiles(updated)
+        })
+
+        return () => unsubscribe()
+    }, [userId])
+    useEffect(() => {
+        const userConfigRef = collection(database, 'UserConfig')
+
+        const unsubscribe = onSnapshot(userConfigRef, (querySnapshot) => {
+            const userMap = {}
+            querySnapshot.forEach((doc) => {
+                const data = doc.data()
+                userMap[data.userId] = data.name // Mapeia userId -> name
+            })
+            console.log('User configs:', userMap) // Verifique o conteúdo aqui
+            setUserConfigs(userMap)
+        })
+
+        return () => unsubscribe()
     }, [])
 
     return (
@@ -82,16 +119,42 @@ export default function HeaderBar({ title }: { title?: string }) {
                         ai="center"
                         gap={4}
                         onPress={toggle}>
-                        <Avatar size={70} circular space="$2">
-                            <Avatar.Image
-                                accessibilityLabel="Cam"
-                                src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
+                        <XStack>
+                            <FlatList
+                                data={files}
+                                keyExtractor={(item) => item.userId}
+                                renderItem={({ item }) => {
+                                    console.log('Current userId:', userId) // Verifique o valor aqui
+                                    console.log('Item userId:', item.userId) // Verifique o valor aqui
+                                    return (
+                                        <XStack>
+                                            {userId === item.userId ? (
+                                                <Avatar circular size="$7">
+                                                    <Avatar.Image
+                                                        accessibilityLabel="User image"
+                                                        src={{ uri: item.url }}
+                                                    />
+                                                    <Avatar.Fallback backgroundColor="$blue10" />
+                                                </Avatar>
+                                            ) : (
+                                                <Avatar circular size="$8">
+                                                    <Avatar.Image
+                                                        accessibilityLabel="Default image"
+                                                        src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
+                                                    />
+                                                    <Avatar.Fallback backgroundColor="$blue10" />
+                                                </Avatar>
+                                            )}
+                                            <XStack ai="center">
+                                                <Text fontSize={20} color="white" pl={10}>
+                                                    {userConfigs[item.userId] || 'No name set'}
+                                                </Text>
+                                            </XStack>
+                                        </XStack>
+                                    )
+                                }}
                             />
-                            <Avatar.Fallback backgroundColor="$gray5" />
-                        </Avatar>
-                        <Text fontSize={20} color="white" pl={10}>
-                            Hi, {userId}
-                        </Text>
+                        </XStack>
                     </XStack>
                     <View ml="auto" pt={40}>
                         <MaterialIcons name="logout" size={30} color="white" />
