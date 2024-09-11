@@ -90,7 +90,7 @@ export default function TrainingC() {
                 title: 'Chat',
                 header: () => <HeaderSignOut title={'My Training'} />,
             }}>
-            <YStack f={1} p={16} bg="#0a0a0a" width="100%">
+            <YStack f={1} p={16} bg="#171717" width="100%">
                 <XStack p={16}>
                     <Text fontSize={20} color="white" textAlign="center" ac="center">
                         Training C

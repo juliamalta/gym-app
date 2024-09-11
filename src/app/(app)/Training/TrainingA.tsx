@@ -90,7 +90,7 @@ export default function TrainingA() {
                 title: 'Chat',
                 header: () => <HeaderSignOut title={'My Training'} />,
             }}>
-            <YStack f={1} p={16} bg="#0a0a0a" width="100%">
+            <YStack f={1} p={16} bg="#171717" width="100%">
                 <XStack p={16}>
                     <Text fontSize={20} color="white" textAlign="center" ac="center">
                         Training A
@@ -111,7 +111,9 @@ export default function TrainingA() {
                             <XStack bg="#262626" p={16} borderRadius={10} mt={16} f={1} jc="space-between">
                                 <YStack>
                                     <YStack>
-                                        <Text color="white">{item.exercise}</Text>
+                                        <Text color="white" fontSize={16}>
+                                            {item.exercise}
+                                        </Text>
                                     </YStack>
                                     <XStack gap={12}>
                                         <Text color="white">{item.qntSerie} series</Text>

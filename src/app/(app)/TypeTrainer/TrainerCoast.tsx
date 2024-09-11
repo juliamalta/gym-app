@@ -63,9 +63,6 @@ export default function TrainerCoast() {
                                     </Text>
                                 </YStack>
                             </XStack>
-                            <XStack>
-                                <MaterialCommunityIcons name="weight-lifter" size={28} color="white" />
-                            </XStack>
                         </XStack>
                     )}
                 />

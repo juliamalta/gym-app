@@ -1,18 +1,27 @@
 import { Entypo } from '@expo/vector-icons'
+import { Feather } from '@expo/vector-icons'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+import Octicons from '@expo/vector-icons/Octicons'
 import * as ImagePicker from 'expo-image-picker'
 import { Stack } from 'expo-router'
+import { router } from 'expo-router'
 import { getItem } from 'expo-secure-store'
 import { collection, addDoc, query, where, onSnapshot } from 'firebase/firestore'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { useState, useEffect } from 'react'
 import { TouchableOpacity, TextInput, StyleSheet, Alert, View, Image } from 'react-native'
 import { FlatList } from 'react-native'
-import { Avatar, YStack, Text, XStack } from 'tamagui'
+import { Avatar, YStack, Text, XStack, YGroup, XGroup } from 'tamagui'
 
+import { appPath } from '@/common/configs/paths.config'
+import { BoxDetailItemProps } from '@/components/core/BoxDetailItem'
+import { Card } from '@/components/core/CardPainel'
+import CardsPainel from '@/components/core/CardPainel/CardPainel'
 import { HeaderSignOut } from '@/components/layout/HeaderSignOut'
 import { ScreenTemplate } from '@/components/template/ScreenTemplate'
+import { useProtectedRoute } from '@/hooks/useProtectedRoute'
 
 import { auth, database, storage } from '../../../firebaseConfig'
 
@@ -143,6 +152,19 @@ export default function Config() {
             console.error('Error saving document:', e)
         }
     }
+    useProtectedRoute()
+    const menuBox: BoxDetailItemProps[] = [
+        {
+            link: appPath.TypeTrainer.shoulders,
+            icon: <MaterialIcons name="emoji-people" size={24} color="white" />,
+            name: 'Mediçoes',
+        },
+        {
+            link: appPath.projects.index,
+            icon: <MaterialIcons name="sports-gymnastics" size={24} color="white" />,
+            name: 'All Exercises ',
+        },
+    ]
 
     return (
         <ScreenTemplate
@@ -202,7 +224,7 @@ export default function Config() {
                 </YStack>
                 <YStack>
                     <YStack p={16}>
-                        <YStack p={16}>
+                        <YStack p={8}>
                             <Text color="white" textAlign="left">
                                 Display name
                             </Text>
@@ -222,12 +244,28 @@ export default function Config() {
                             }}
                         />
                     </YStack>
-                    <XStack p={16}>
+                    <YStack>
+                        <YStack p={8}>
+                            <Text color="white" textAlign="left">
+                                Painel
+                            </Text>
+                        </YStack>
+                        <XGroup style={styles.gridContainer}>
+                            {menuBox.map((item, index) => (
+                                <YGroup.Item key={index} style={styles.gridItem}>
+                                    <TouchableOpacity onPress={() => router.push(item.link as never)}>
+                                        <CardsPainel name={item.name} icon={item.icon} />
+                                    </TouchableOpacity>
+                                </YGroup.Item>
+                            ))}
+                        </XGroup>
+                    </YStack>
+                    <XStack p={16} mt={16}>
                         <TouchableOpacity style={styles.button} onPress={changeName}>
                             <Text color="white">Save Changes</Text>
                         </TouchableOpacity>
                     </XStack>
-                    <XStack p={16} m="auto">
+                    <XStack m="auto">
                         <TouchableOpacity>
                             <Text color="#3b82f6">Cancel</Text>
                         </TouchableOpacity>
@@ -246,5 +284,24 @@ const styles = StyleSheet.create({
         borderRadius: 40,
         alignItems: 'center',
         marginBottom: 10,
+    },
+    gridContainer: {
+        flexDirection: 'row', // Exibe itens em linha
+        flexWrap: 'wrap', // Quebra a linha após dois itens
+        justifyContent: 'space-between', // Espaço entre os itens
+        paddingHorizontal: 38,
+    },
+    gridItem: {
+        width: '48%', // Cada item ocupa quase metade da largura
+        marginBottom: 16, // Espaço entre as linhas
+        backgroundColor: '#262626',
+        padding: 16,
+
+        borderRadius: 8,
+        alignItems: 'center', // Centraliza os itens dentro de cada box
+    },
+    itemText: {
+        color: 'white',
+        marginTop: 8,
     },
 })

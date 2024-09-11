@@ -1,9 +1,13 @@
+import Entypo from '@expo/vector-icons/Entypo'
 import Ionicons from '@expo/vector-icons/Ionicons'
+import * as ImagePicker from 'expo-image-picker'
 import { collection, onSnapshot, deleteDoc, query, where, QuerySnapshot, updateDoc, addDoc } from 'firebase/firestore'
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { TouchableOpacity, TextInput, Button, Alert, StyleSheet } from 'react-native'
 import { FlatList } from 'react-native'
+import { Image } from 'react-native'
 import { XStack, YStack, Text } from 'tamagui'
 import { Avatar } from 'tamagui'
 
@@ -18,7 +22,10 @@ export default function NewChat() {
     const [comment, setcomment] = useState('')
     const [like, setlike] = useState(0)
     const [formVisible, setFormVisible] = useState(true)
+    const [image, setImage] = useState('')
+    const [progress, setProgress] = useState(0)
     const [files, setFiles] = useState<any[]>([])
+    const [filesChat, setFilesChat] = useState<any[]>([])
     const user = auth.currentUser
     const userId = user ? user.email : null
 
@@ -61,6 +68,77 @@ export default function NewChat() {
 
         return () => unsubscribe()
     }, [userId])
+
+    useEffect(() => {
+        const unsubscribe = onSnapshot(collection(database, 'filesChat'), (snapshot) => {
+            const updated = []
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === 'added') {
+                    const file = change.doc.data()
+                    if (file.userId === userId) {
+                        // Only include files for the current user
+                        updated.push(file)
+                    }
+                }
+            })
+            console.log('Updated files:', updated)
+            setFilesChat(updated)
+        })
+
+        return () => unsubscribe()
+    }, [userId])
+
+    async function pickImage() {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [3, 4],
+            quality: 1,
+        })
+        if (!result.canceled) {
+            setImage(result.assets[0].uri)
+            await uploadImage(result.assets[0].uri, 'image')
+        }
+    }
+
+    async function uploadImage(uri, fileType) {
+        const response = await fetch(uri)
+        const blob = await response.blob()
+        const storageRef = ref(storage, 'ChatImage/' + new Date().getTime())
+        const uploadTask = uploadBytesResumable(storageRef, blob)
+
+        uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                console.log('Upload is ' + progress + '% done')
+                setProgress(progress.toFixed())
+            },
+            (error) => {
+                console.error('Upload failed:', error)
+            },
+            async () => {
+                const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
+                console.log('File Available at', downloadURL)
+                await saveRecord(fileType, downloadURL, new Date().toISOString())
+                setImage('')
+            }
+        )
+    }
+
+    async function saveRecord(fileType, url, createdAt) {
+        try {
+            const docRef = await addDoc(collection(database, 'filesChat'), {
+                fileType,
+                url,
+                createdAt,
+                userId,
+            })
+            console.log('Document saved correctly', docRef.id)
+        } catch (e) {
+            console.error('Error saving document:', e)
+        }
+    }
 
     return (
         <ScreenTemplate
@@ -119,6 +197,21 @@ export default function NewChat() {
                                 )}
                             />
                         </XStack>
+                        <FlatList
+                            data={filesChat}
+                            keyExtractor={(item) => item.userId}
+                            renderItem={({ item }) => (
+                                <XStack>
+                                    <Image source={{ uri: item.url }} style={styles.image} />
+                                </XStack>
+                            )}
+                        />
+
+                        <XStack mt="auto" ml="auto" pt={10}>
+                            <TouchableOpacity onPress={pickImage}>
+                                <Entypo name="image" size={24} color="#60a5fa" />
+                            </TouchableOpacity>
+                        </XStack>
                     </YStack>
                 ) : (
                     <XStack f={1} p={16} alignItems="center" justifyContent="center" bg="#0a0a0a">
@@ -140,5 +233,12 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         marginBottom: 5,
+    },
+    image: {
+        width: '100%',
+        height: 400,
+        margin: 5,
+        borderRadius: 8,
+        resizeMode: 'cover',
     },
 })

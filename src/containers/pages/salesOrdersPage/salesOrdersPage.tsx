@@ -84,7 +84,7 @@ export default function SalesOrdersPage() {
                 title: 'Chat',
                 header: () => <ChatHeader title={'My Training'} />,
             }}>
-            <YStack f={1} p={16} bg="#0a0a0a">
+            <YStack f={1} bg="#0a0a0a">
                 <XStack p={16}>
                     <Text fontSize={20} color="white">
                         Create a training or consult your training
@@ -92,11 +92,11 @@ export default function SalesOrdersPage() {
                 </XStack>
                 <YGroup gap={30}>
                     {itens.map((item, index) => (
-                        <YGroup.Item key={index}>
+                        <XGroup.Item key={index}>
                             <TouchableOpacity onPress={() => router.push(item.link as never)}>
                                 <CardSeries name={item.name} />
                             </TouchableOpacity>
-                        </YGroup.Item>
+                        </XGroup.Item>
                     ))}
                 </YGroup>
             </YStack>

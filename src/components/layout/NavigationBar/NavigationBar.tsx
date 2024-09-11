@@ -1,5 +1,6 @@
 import { Feather, AntDesign, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 import Entypo from '@expo/vector-icons/Entypo'
+import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { Link, usePathname } from 'expo-router'
 import React from 'react'
 import { XStack, Text, YStack } from 'tamagui'
@@ -7,7 +8,6 @@ import { XStack, Text, YStack } from 'tamagui'
 import { appPath } from '@/common/configs/paths.config'
 import ProjectIcon from '@/components/icons/ProjectIcon'
 import SalesIcon from '@/components/icons/SalesIcon'
-
 export default function NavigationBar() {
     const pathname = usePathname()
 
@@ -15,20 +15,9 @@ export default function NavigationBar() {
         {
             link: appPath.dashboard,
             icon: <Entypo name="home" size={24} />,
-            title: 'Dashboard',
+            title: 'Home',
         },
-        {
-            link: appPath.projects.index,
-            icon: (
-                <MaterialCommunityIcons
-                    name="weight-lifter"
-                    size={24}
-                    color={pathname === appPath.projects.index ? '#4f46e5' : 'white'}
-                />
-            ),
 
-            title: 'Exercícios',
-        },
         {
             link: appPath.salesOrders.index,
             icon: (
@@ -38,7 +27,7 @@ export default function NavigationBar() {
                     color={pathname === appPath.salesOrders.index ? '#4f46e5' : 'white'}
                 />
             ),
-            title: 'My training',
+            title: 'Training',
         },
         {
             link: appPath.chat.index,
@@ -47,18 +36,18 @@ export default function NavigationBar() {
         },
         {
             link: appPath.more.index,
-            icon: <Feather name="more-horizontal" size={24} />,
-            title: 'More',
+            icon: <FontAwesome name="user" size={24} />,
+            title: 'Perfil',
         },
     ]
 
     return (
         <XStack
-            backgroundColor="#0c0a09"
+            backgroundColor="#171717"
             w="100%"
             height={83}
             px={24}
-            pb={34}
+            pb={10}
             pt={8}
             jc="space-between"
             alignItems="center"
