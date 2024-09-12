@@ -1,4 +1,6 @@
 import { FontAwesome } from '@expo/vector-icons'
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { getItem } from 'expo-secure-store'
@@ -19,7 +21,7 @@ import { TouchableOpacity } from 'react-native'
 import { Modal } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { TextInput } from 'react-native'
-import { Text, XStack, YStack, XGroup, View, Alert } from 'tamagui'
+import { Text, XStack, YStack, XGroup, View, Alert, Button } from 'tamagui'
 
 import { Card } from '@/components/core/Card'
 import { HeaderSignOut } from '@/components/layout/HeaderSignOut'
@@ -27,7 +29,7 @@ import { ScreenTemplate } from '@/components/template/ScreenTemplate'
 
 import { auth, database } from '../../../firebaseConfig'
 
-export default function TrainingB() {
+export default function TrainingA() {
     const [modalVisible, setModalVisible] = useState(false)
     const [trainingA, setTrainingA] = useState('')
     const [exercise, setExercise] = useState('')
@@ -90,15 +92,37 @@ export default function TrainingB() {
                 title: 'Chat',
                 header: () => <HeaderSignOut title={'My Training'} />,
             }}>
-            <YStack f={1} p={16} bg="#171717" width="100%">
+            <YStack f={1} p={16} bg="#0a0a0a" width="100%">
                 <XStack p={16}>
-                    <Text fontSize={20} color="white" textAlign="center" ac="center">
-                        Training B
-                    </Text>
+                    <YStack m="auto">
+                        <Text fontSize={20} color="white" textAlign="center" ac="center">
+                            Training B
+                        </Text>
+                        <XStack>
+                            <XStack gap={10}>
+                                <XStack pt={16}>
+                                    <Text color="white">Duração</Text>
+                                </XStack>
+                                <XStack pt={16}>
+                                    <Text color="white">00:00</Text>
+                                </XStack>
+                                <XStack pt={16}>
+                                    <TouchableOpacity>
+                                        <FontAwesome5 name="play-circle" size={28} color="green" />
+                                    </TouchableOpacity>
+                                </XStack>
+                                <XStack pt={16}>
+                                    <TouchableOpacity>
+                                        <FontAwesome6 name="circle-stop" size={28} color="red" />
+                                    </TouchableOpacity>
+                                </XStack>
+                            </XStack>
+                        </XStack>
+                    </YStack>
                 </XStack>
                 <XStack>
                     <Text fontSize={18} color="white" textAlign="center" ac="center">
-                        Add your Exercices
+                        Add your Exercises
                     </Text>
                 </XStack>
 
@@ -108,14 +132,22 @@ export default function TrainingB() {
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) =>
                         userId === item.userId && ( // Verifica se o item pertence ao usuário logado
-                            <XStack bg="#404040" p={16} borderRadius={10} mt={16} f={1} jc="space-between">
+                            <XStack bg="#262626" p={16} borderRadius={10} mt={16} f={1} jc="space-between">
                                 <YStack>
                                     <YStack>
-                                        <Text color="white">{item.exercise}</Text>
+                                        <Text color="white" fontSize={18}>
+                                            {item.exercise}
+                                        </Text>
                                     </YStack>
-                                    <XStack gap={12}>
-                                        <Text color="white">{item.qntSerie} series</Text>
-                                        <Text color="white">{item.qntRepeticao} repetition</Text>
+                                    <XStack jc="space-between" pt={8} gap={20}>
+                                        <YStack gap={10}>
+                                            <Text color="white">Série</Text>
+                                            <Text color="white">{item.qntSerie} </Text>
+                                        </YStack>
+                                        <YStack gap={10}>
+                                            <Text color="white">Repetition</Text>
+                                            <Text color="white">{item.qntRepeticao}</Text>
+                                        </YStack>
                                     </XStack>
                                 </YStack>
 

@@ -175,11 +175,6 @@ export default function Config() {
             <Stack.Screen />
 
             <YStack bg="#0a0a0a" width="100%" height="100%" f={1}>
-                <YStack>
-                    <Text color="white" fontSize={20} textAlign="center">
-                        Edit my profile
-                    </Text>
-                </YStack>
                 <YStack bg="#262626" minHeight={200} mt={16}>
                     <YStack pt={16}>
                         <YStack jc="center" ai="center">
