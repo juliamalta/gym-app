@@ -22,13 +22,14 @@ import { Modal } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { TextInput } from 'react-native'
 import { Text, XStack, YStack, XGroup, View, Alert, Button } from 'tamagui'
+import { Avatar } from 'tamagui'
 
 import { Card } from '@/components/core/Card'
 import { HeaderSignOut } from '@/components/layout/HeaderSignOut'
 import { ScreenTemplate } from '@/components/template/ScreenTemplate'
 
+import logo from '../../../../assets/halter.png'
 import { auth, database } from '../../../firebaseConfig'
-
 export default function TrainingA() {
     const [modalVisible, setModalVisible] = useState(false)
     const [trainingA, setTrainingA] = useState('')
@@ -37,6 +38,38 @@ export default function TrainingA() {
     const [qntSerie, setqntSerie] = useState('')
     const user = auth.currentUser
     const userId = user ? user.email : null
+    const [seconds, setSeconds] = useState(0)
+    const [minutes, setMinutes] = useState(0)
+    const [customInterval, setCustomInterval] = useState<number | undefined>(undefined)
+
+    const starTime = () => {
+        setCustomInterval(
+            setInterval(() => {
+                changeTime()
+            }, 1000)
+        )
+    }
+
+    const stopTime = () => {
+        if (customInterval) {
+            clearInterval(customInterval)
+        }
+    }
+    const clearTime = () => {
+        stopTime()
+        setSeconds(0)
+        setMinutes(0)
+    }
+    const changeTime = () => {
+        setSeconds((prevState) => {
+            if (prevState + 1 == 60) {
+                setMinutes(minutes + 1)
+
+                return 0
+            }
+            return prevState + 1
+        })
+    }
 
     useEffect(() => {
         // Reference to the 'Chats' collection
@@ -93,35 +126,15 @@ export default function TrainingA() {
                 header: () => <HeaderSignOut title={'My Training'} />,
             }}>
             <YStack f={1} p={16} bg="#0a0a0a" width="100%">
-                <XStack p={16}>
+                <XStack p={8}>
                     <YStack m="auto">
                         <Text fontSize={20} color="white" textAlign="center" ac="center">
                             Training D
                         </Text>
-                        <XStack>
-                            <XStack gap={10}>
-                                <XStack pt={16}>
-                                    <Text color="white">Duração</Text>
-                                </XStack>
-                                <XStack pt={16}>
-                                    <Text color="white">00:00</Text>
-                                </XStack>
-                                <XStack pt={16}>
-                                    <TouchableOpacity>
-                                        <FontAwesome5 name="play-circle" size={28} color="green" />
-                                    </TouchableOpacity>
-                                </XStack>
-                                <XStack pt={16}>
-                                    <TouchableOpacity>
-                                        <FontAwesome6 name="circle-stop" size={28} color="red" />
-                                    </TouchableOpacity>
-                                </XStack>
-                            </XStack>
-                        </XStack>
                     </YStack>
                 </XStack>
                 <XStack>
-                    <Text fontSize={18} color="white" textAlign="center" ac="center">
+                    <Text fontSize={16} color="white" textAlign="center" ac="center" m="auto">
                         Add your Exercises
                     </Text>
                 </XStack>
@@ -133,23 +146,29 @@ export default function TrainingA() {
                     renderItem={({ item }) =>
                         userId === item.userId && ( // Verifica se o item pertence ao usuário logado
                             <XStack bg="#262626" p={16} borderRadius={10} mt={16} f={1} jc="space-between">
-                                <YStack>
+                                <TouchableOpacity>
                                     <YStack>
-                                        <Text color="white" fontSize={18}>
-                                            {item.exercise}
-                                        </Text>
+                                        <XStack gap={2} ai="center">
+                                            <Avatar circular size="$6">
+                                                <Avatar.Image accessibilityLabel="Cam" src={logo} />
+                                                <Avatar.Fallback backgroundColor="$blue10" />
+                                            </Avatar>
+                                            <Text color="white" fontSize={16} textAlign="center">
+                                                {item.exercise}
+                                            </Text>
+                                        </XStack>
+                                        <XStack jc="space-between">
+                                            <YStack gap={10}>
+                                                <Text color="white">Série</Text>
+                                                <Text color="white">{item.qntSerie} </Text>
+                                            </YStack>
+                                            <YStack gap={10}>
+                                                <Text color="white">Repetition</Text>
+                                                <Text color="white">{item.qntRepeticao}</Text>
+                                            </YStack>
+                                        </XStack>
                                     </YStack>
-                                    <XStack jc="space-between" pt={8} gap={20}>
-                                        <YStack gap={10}>
-                                            <Text color="white">Série</Text>
-                                            <Text color="white">{item.qntSerie} </Text>
-                                        </YStack>
-                                        <YStack gap={10}>
-                                            <Text color="white">Repetition</Text>
-                                            <Text color="white">{item.qntRepeticao}</Text>
-                                        </YStack>
-                                    </XStack>
-                                </YStack>
+                                </TouchableOpacity>
 
                                 <TouchableOpacity onPress={() => handleDelete(item.id)}>
                                     <FontAwesome name="trash" size={23} color="#f92e64"></FontAwesome>
