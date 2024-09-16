@@ -1,4 +1,5 @@
 import { Feather } from '@expo/vector-icons'
+import Ionicons from '@expo/vector-icons/Ionicons'
 import { Link } from 'expo-router'
 import React from 'react'
 import { Button, XStack, Text, View } from 'tamagui'
@@ -12,8 +13,8 @@ export default function HeaderSignOut({ title }: { title: string }) {
     useProtectedRoute()
     const menuBox: BoxDetailItemProps[] = [
         {
-            link: appPath.notifications,
-            icon: <Feather color="white" name="bell" size={24} />,
+            link: appPath.dashboard,
+            icon: <Ionicons name="chevron-back" size={24} />,
             title: 'Notifications',
         },
     ]
