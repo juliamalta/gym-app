@@ -76,7 +76,7 @@ const App = () => {
                 fontWeight="500"
                 height={50}
                 borderRadius={10}
-                backgroundColor="$secondary"
+                backgroundColor="#5c216e"
                 pressStyle={{ backgroundColor: '$colors.secondary50' }}
                 color="white"
                 onPress={handleSignIn}>

@@ -9,7 +9,7 @@ export default function SignInPage() {
     return (
         <>
             <ScreenTemplate>
-                <YStack fullscreen px="$xl" gap="$xl3">
+                <YStack fullscreen px="$xl" gap="$xl3" bg="#0a0a0a">
                     <SignInHeader />
                     <SignInForm />
                     <SignInErrorModal />
