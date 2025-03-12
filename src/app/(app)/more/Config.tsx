@@ -274,7 +274,7 @@ export default function Config() {
 const styles = StyleSheet.create({
     button: {
         width: '100%',
-        backgroundColor: '#262626', // Dark background color
+        backgroundColor: '#4f46e5', // Dark background color
         padding: 16,
         borderRadius: 40,
         alignItems: 'center',

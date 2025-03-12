@@ -27,7 +27,6 @@ export default function Dashboard() {
                         icon={<MaterialIcons name="sports-gymnastics" size={36} color="white" />}
                     />
                     <CardsSecondary name="Nome do Usuario" />
-                    <CardsSecondary name="Nome do Usuario" />
                 </YStack>
             </ScrollView>
         </ScreenTemplate>

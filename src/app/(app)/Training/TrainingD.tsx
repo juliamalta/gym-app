@@ -180,7 +180,7 @@ export default function TrainingA() {
 
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
                     <XStack ml="auto">
-                        <MaterialIcons name="add-circle" size={48} color="white" />
+                        <MaterialIcons name="add-circle" size={48} color="#4f46e5" />
                     </XStack>
                 </TouchableOpacity>
                 <Modal
