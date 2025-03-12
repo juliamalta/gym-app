@@ -1,27 +1,25 @@
-import { onAuthStateChanged } from 'firebase/auth'
-import { useAtom, useAtomValue } from 'jotai'
-import { useCallback, useEffect, useState } from 'react'
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth'
+import { useEffect, useState } from 'react'
 
-import { gqlClient } from '@/common/configs'
-import { ISignInForm } from '@/common/types'
-import { useLoginMutation } from '@/data/mutations/login.mutation'
-import { ViewerStorage } from '@/data/storage'
-import { authStore } from '@/store/auth.atoms'
-
-import { auth } from '../firebaseConfig'
-export default function useAuth() {
-    const [user, setUser] = useState(null)
+export function useAuth() {
+    const [user, setUser] = useState<User | null | undefined>(undefined) // 'undefined' indica estado indefinido
+    const auth = getAuth()
 
     useEffect(() => {
-        const unSub = onAuthStateChanged(auth, (user) => {
-            console.log('got user :', user)
-            if (user) {
-                setUser(user)
-            } else {
-                setUser(null)
-            }
+        const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+            console.log('🔥 Estado do usuário atualizado:', firebaseUser)
+
+            // Evita re-render desnecessário
+            setUser((prevUser) => {
+                if (prevUser?.uid !== firebaseUser?.uid) {
+                    return firebaseUser
+                }
+                return prevUser
+            })
         })
-        return unSub
+
+        return () => unsubscribe()
     }, [])
-    return { user }
+
+    return { isAuthenticated: !!user, user }
 }

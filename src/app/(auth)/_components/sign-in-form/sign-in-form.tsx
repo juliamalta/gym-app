@@ -1,11 +1,11 @@
+import { router } from 'expo-router'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native'
 import { XStack, YStack } from 'tamagui'
 
 import { LoadingButton } from '@/components/core/LoadingButton'
-
-import { app } from '../../../../firebaseConfig'
+import { app } from '@/firebaseConfig'
 
 const App = () => {
     const [email, setEmail] = useState('')
@@ -28,12 +28,17 @@ const App = () => {
 
     const handleSignIn = async () => {
         try {
-            console.log('Attempting to sign in with email:', email)
-            await signInWithEmailAndPassword(auth, email, password)
-            console.log('User successfully signed in')
-            setMessage('Usuário autenticado com sucesso!')
+            console.log('Tentando fazer login com:', email)
+            const userCredential = await signInWithEmailAndPassword(auth, email, password)
+
+            console.log('✅ Usuário logado:', userCredential.user)
+
+            // Aguarde um pouco antes de redirecionar para evitar conflitos
+            setTimeout(() => {
+                router.replace('/dashboard')
+            }, 500)
         } catch (error) {
-            console.log('Sign in error:', error)
+            console.log('❌ Erro no login:', error)
             setMessage(`Erro: ${error.message}`)
         }
     }
