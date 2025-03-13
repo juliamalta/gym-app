@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "StoreBM",
-    "slug": "storebm-app",
+    "slug": "gym-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/storebm-icon.png",
@@ -48,7 +48,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "b1ee51a4-d9cf-4798-88fd-ba73224ecfb6"
+        "projectId": "bed98fe2-4c9c-4b28-ae2b-e1dd233216e1"
       }
     },
     "owner": "jujumalta12"
