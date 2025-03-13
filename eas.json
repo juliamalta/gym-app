@@ -5,18 +5,14 @@
     "requireCommit": true
   },
   "build": {
-   "development": {
-      "environment": "development"
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
     },
     "preview": {
-      "environment": "preview"
+      "distribution": "internal"
     },
-    "production": {
-      "environment": "production"
-    },
-    "my-profile": {
-      "environment": "production"
-  }
+    "production": {}
   },
   "submit": {
     "production": {}
