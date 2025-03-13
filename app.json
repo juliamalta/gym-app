@@ -25,7 +25,8 @@
       },
       "permissions": [
         "android.permission.RECORD_AUDIO"
-      ]
+      ],
+      "package": "com.gym.jmd"
     },
     "web": {
       "favicon": "./assets/icon.png",
@@ -39,12 +40,15 @@
       "expo-router",
       "expo-font",
       "expo-secure-store",
-    "@react-native-firebase/app",
-  "@react-native-firebase/auth"
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth"
     ],
     "extra": {
       "router": {
         "origin": false
+      },
+      "eas": {
+        "projectId": "b1ee51a4-d9cf-4798-88fd-ba73224ecfb6"
       }
     }
   }
